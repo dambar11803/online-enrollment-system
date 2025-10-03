@@ -1,0 +1,46 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+{% block title %}user-profile{% endblock %}
+{% block css %} <link rel="stylesheet" href="{% static 'css/profile.css' %}"> {% endblock css %}
+     
+{% block body %}
+  <div class="creditor-container">
+   {% comment %} <h2>My Profile</h2> {% endcomment %}
+
+    <div class="user-profile-pic">
+        {% if personalinfo and personalinfo.profile_pic %}
+            <img class="text-center" src="{{ personalinfo.profile_pic.url }}" alt="Profile Picture">
+        {% else %}
+            {% comment %} <i class="fa-solid fa-user"></i> {% endcomment %}
+            <img class="text-center"  src="{% static 'images/profile_pic1.jpg' %}" alt="Default Profile">
+        {% endif %}
+    </div>
+
+    <div class="creditor-detail">
+        <table class="table table-success table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ user.first_name}} {{ user.last_name}}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{ personalinfo.address }}</td>
+                </tr>
+                 <tr>
+                    <th>Mobile</th>
+                    <td>{{ user.mobile }}</td>
+                </tr>
+                 <tr>
+                    <th>Email</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="password-chg">
+          <a href="#" class="btn-change-password">Change Password</a>
+    </div>
+  </div>
+{% endblock %}

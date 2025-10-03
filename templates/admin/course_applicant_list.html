@@ -1,0 +1,47 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block title %}Course Applications{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="">
+{% endblock %}
+
+{% block content %}
+<div class="course-applications-list container mt-4">
+    <div class="applicant-personal-info">
+        {% if applicants %}
+            <table class="table table-striped table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Applicant Name</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Applied On</th>
+                        <th>Status</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applicants %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ app.user.get_full_name|default:app.user.username }}</td>
+                        <td>{{ app.user.email }}</td>
+                        <td>{{ app.course.course_name }}</td>
+                        <td>{{ app.submitted_at|date:"Y-m-d H:i" }}</td>
+                         <td>{{ app.application_status }}</td>
+                        <td>
+                            <a href="{% url 'course_applicant_detail' app.pk %}"><i class="fa-solid fa-eye"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info text-center">No applications found.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

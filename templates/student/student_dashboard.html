@@ -1,0 +1,178 @@
+{% extends 'student/student_base.html' %} {% load static %} {% block title %}
+student_dashboard {% endblock %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/student/student_dashboard.css' %}"
+/>
+{% endblock %} {% block body %}
+<div class="student-dashboard container">
+  <div class="course-stat pb-5">
+    <div class="row">
+      <div class="course-title">Course Detail</div>
+      <div class="col">
+        <div class="col-card py-5">
+          <p>{{ total_courses }}</p>
+          <p>Total Courses</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col-card py-5">
+          <p>{{ plus2_course_count }}</p>
+          <p>Total Plus2 Courses</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col-card py-5">
+          <p>{{ bachelor_course_count }}</p>
+          <p>Total Bachelor Courses</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="col-card py-5">
+          <p>{{ master_course_count }}</p>
+          <p>Total Master Courses</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Courses Detail Section -->
+  {% comment %} <div class="dashboard-title">Choose Course</div> {% endcomment %}
+
+  <!--Plus2 Section-->
+  <div class="plus2-section pt-5">
+    <div class="course-title pb-5">Plus2 Courses</div>
+    <div class="row">
+      {% for course in plus2_courses%}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          {% if course.bg_pic %}
+          <div
+            class="card-img-top course-bg"
+            style="background-image: url('{{ course.bg_pic.url }}');"
+          ></div>
+          {% else %}
+          <div
+            class="card-img-top course-bg"
+            style="background-image: url('{% static 'images/pic.jpg' %}')"
+          ></div>
+          {% endif %} 
+          <div class="card-body">
+            <h5 class="card-title text-decoration-underline">
+              {{ course.course_name}}
+            </h5>
+            <p class="text-muted">Duration: {{ course.course_duration }}</p>
+            <p class="text-muted">
+              Available Seats: {{ course.remaining_seat }}
+            </p>
+            <div class="apply-btn text-center">
+              <a
+                href="{% url 'select_course' course.pk %}"
+                class="btn btn-primary text-center"
+                >Detail</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 py-5">
+        <p>No Plus2 Courses Available</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!--Bachelor Section-->
+  <div class="bachelor-section py-5">
+    <div class="course-title py-5">Bachelor Courses</div>
+    <div class="row">
+      {% for course in bachelor_courses%}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          {% if course.bg_pic %}
+          <div
+            class="card-img-top course-bg"
+            style="background-image: url('{{course.bg_pic.url}}');"
+          ></div>
+          {% else %}
+          <div
+            class="card-img-top course-bg"
+            style="background-image: url('{% static 'css/images/pic.jpg' %}')"
+          ></div>
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title text-decoration-underline">
+              {{ course.course_name}}
+            </h5>
+            <p class="text-muted">Duration: {{ course.course_duration }}</p>
+            <p class="text-muted">
+              Available Seats: {{ course.remaining_seat }}
+            </p>
+            <div class="apply-btn text-center">
+              <a
+                href="{% url 'select_course' course.pk %}"
+                class="btn btn-primary text-center"
+                >Detail</a
+              >
+            </div>
+          
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p>No Bachelor Courses Available</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!--Master Section-->
+  <div class="master-section py-5">
+    <div class="course-title py-5">Master Courses</div>
+    <div class="row">
+      {% for course in master_courses %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+
+          {% if course.bg_pic %}
+            <div class="card-img-top course-bg" 
+                style="background-image: url('{{ course.bg_pic.url }}');">
+            </div>
+          {% else %}
+            <div class="card-img-top course-bg" 
+                style="background-image: url('{% static 'images/pic.jpg' %}');">
+            </div>
+          {% endif %}
+            
+          <div class="card-body">
+            <h5 class="card-title text-decoration-underline">
+              {{ course.course_name}}
+            </h5>
+            <p class="text-muted">Duration: {{ course.course_duration }}</p>
+            <p class="text-muted">
+              Available Seats: {{ course.remaining_seat }}
+            </p>
+            <div class="apply-btn text-center">
+              <a
+                href="{% url 'select_course' course.pk %}"
+                class="btn btn-primary text-center"
+                >Detail</a
+              >
+            </div>
+           
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p>No Master Courses Available</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!--End of Master Section-->
+</div>
+{% endblock body %}

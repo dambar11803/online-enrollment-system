@@ -1,0 +1,152 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+
+{% block title %}
+  Add Educational Information
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/educational_info.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-4">
+    <!-- Messages -->
+    {% if messages %}
+      <div class="mb-3">
+        {% for message in messages %}
+          <div class="alert {% if message.tags %}
+              alert-{{ message.tags }}
+            {% else %}
+              alert-info
+            {% endif %} alert-dismissible fade show"
+            role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Educational Information</h4>
+          </div>
+
+          <form method="post" enctype="multipart/form-data" class="card-body">
+            {% csrf_token %}
+
+            <!-- Row 1: Level, Faculty -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_level">Level *</label>
+                <select class="form-select" id="id_level" name="level" required>
+                  <option value="SEE">SEE</option>
+                  <option value="Plus2">Plus2</option>
+                  <option value="Bachelor">Bachelor</option>
+                  <option value="Master">Master</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_faculty">Faculty *</label>
+                <select class="form-select" id="id_faculty" name="faculty" required>
+                  <option value="IT">IT</option>
+                  <option value="Science">Science</option>
+                  <option value="Commerce">Commerce</option>
+                  <option value="Engineering">Engineering</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 2: Course, University -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_course_name">Course Name *</label>
+                <input type="text" class="form-control" id="id_course_name" name="course_name" required />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_university_name">University *</label>
+                <select class="form-select" id="id_university_name" name="university_name" required>
+                  <option value="Nepal Board">Nepal Board</option>
+                  <option value="Pokhara University">Pokhara University</option>
+                  <option value="Purbanchal University">Purbanchal University</option>
+                  <option value="Tribhuvan University" selected>Tribhuvan University</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 3: College, Year, Grade -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_college_name">College Name *</label>
+                <input type="text" class="form-control" id="id_college_name" name="college_name" required />
+              </div>
+              <div class="col-md-3 mb-3">
+                <label class="form-label" for="id_passed_year">Passed Year *</label>
+                <input type="number" class="form-control" id="id_passed_year" name="passed_year" min="1990" step="1" required />
+                <div class="form-text">1990 to current year</div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label class="form-label" for="id_grade_percent">Grade (%) *</label>
+                <input type="number" class="form-control" id="id_grade_percent" name="grade_percent" min="0" max="100" step="0.01" required />
+                <div class="form-text">0–100</div>
+              </div>
+            </div>
+
+            <!-- Row 4: Files 1/2 -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_upload_transcript1">Transcript 1 *</label>
+                <input type="file" class="form-control" id="id_upload_transcript1" name="upload_transcript1" accept=".pdf,.jpg,.jpeg,.png,.bmp" required />
+                <div class="form-text">(pdf or jpg)</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_upload_transcript2">Transcript 2 (optional)</label>
+                <input type="file" class="form-control" id="id_upload_transcript2" name="upload_transcript2" accept=".pdf,.jpg,.jpeg,.png,.bmp" />
+                <div class="form-text">(pdf or jpg)</div>
+              </div>
+            </div>
+
+            <!-- Row 5: Files Character/License -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_upload_character">Character Certificate *</label>
+                <input type="file" class="form-control" id="id_upload_character" name="upload_character" accept=".pdf,.jpg,.jpeg,.png,.bmp" required />
+                <div class="form-text">(pdf or jpg)</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_upload_license">License (optional)</label>
+                <input type="file" class="form-control" id="id_upload_license" name="upload_license" accept=".pdf,.jpg,.jpeg,.png,.bmp" />
+                <div class="form-text">(pdf or jpg)</div>
+              </div>
+            </div>
+
+            <!-- Row 6: Files Other/Other1 -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_upload_other">Other Document (optional)</label>
+                <input type="file" class="form-control" id="id_upload_other" name="upload_other" accept=".pdf,.jpg,.jpeg,.png,.bmp" />
+                <div class="form-text">(pdf or jpg)</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" for="id_upload_other1">Other Document 2 (optional)</label>
+                <input type="file" class="form-control" id="id_upload_other1" name="upload_other1" accept=".pdf,.jpg,.jpeg,.png,.bmp" />
+                <div class="form-text">(pdf or jpg)</div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save me-1"></i> Save</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Font Awesome (icons) & Bootstrap JS if not already in base -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+
+{% block title %}
+  edit-educationalinfo
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/student/edit_educationalinfo.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <div class="edit-educationalinfo-container container py-3">
+    <h2 class="text-center">Edit Education Details</h2>
+    <a href="{% url 'education_list' %}" class="btn btn-primary text-end">Back</a>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Update</button>
+      
+     
+    </form>
+  </div>
+{% endblock %}

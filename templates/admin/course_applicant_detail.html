@@ -1,0 +1,263 @@
+{% extends 'admin/admin_base.html' %} {% load static %} {% load humanize %}
+{%block title %}applicant-detail{% endblock %} {% block css %}
+<style>
+  .applicant-detail .profile-pic {
+    width: 150px;
+    max-width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+  }
+  .label {
+    min-width: 180px;
+    color: #6c757d;
+  }
+  .kv-row {
+    display: flex;
+    gap: 1rem;
+    padding: 0.25rem 0;
+  }
+  .kv-row strong {
+    min-width: 180px;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card img {
+    height: 17rem;
+    width: 17rem;
+    object-fit: cover;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="applicant-detail">
+  <div class="container mt-4">
+    <h2 class="mb-4">Course Applicant Detail</h2>
+
+    <!-- Application Info -->
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <strong>Application Information</strong>
+        <small class="opacity-75"
+          >Submitted {{ applicant.created_at|naturaltime }}</small
+        >
+      </div>
+      <div class="card-body">
+        <div class="kv-row">
+          <strong class="label">Applicant</strong>
+          <div>
+            {{ applicant.user.get_full_name|default:applicant.user.username }}
+          </div>
+        </div>
+        <div class="kv-row">
+          <strong class="label">Email</strong>
+          <div>{{ applicant.user.email|default:"—" }}</div>
+        </div>
+        <div class="kv-row">
+          <strong class="label">Course</strong>
+          <div>{{ applicant.course.name|default:"—" }}</div>
+        </div>
+        <div class="kv-row">
+          <strong class="label">Applied On</strong>
+          <div>{{ applicant.created_at|date:"Y-m-d H:i" }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Info -->
+    {% if per_info %}
+    <div class="card mb-4">
+      <div class="card-header bg-secondary text-white">
+        <strong>Personal Information</strong>
+      </div>
+      <div class="card-body row g-4 align-items-start">
+        <div class="col-md-8">
+          <div class="kv-row">
+            <strong class="label">Address</strong>
+            <div>{{ per_info.address|default:"—" }}</div>
+          </div>
+          <div class="kv-row">
+            <strong class="label">Gender</strong>
+            <div>{{ per_info.get_gender_display|default:"—" }}</div>
+          </div>
+          <div class="kv-row">
+            <strong class="label">Date of Birth</strong>
+            <div>{{ per_info.dob|date:"Y-m-d"|default:"—" }}</div>
+          </div>
+          <div class="kv-row">
+            <strong class="label">Father’s Name</strong>
+            <div>{{ per_info.father|default:"—" }}</div>
+          </div>
+          <div class="kv-row">
+            <strong class="label">Mother’s Name</strong>
+            <div>{{ per_info.mother|default:"—" }}</div>
+          </div>
+          <div class="kv-row">
+            <strong class="label">Grandfather’s Name</strong>
+            <div>{{ per_info.grandfather|default:"—" }}</div>
+          </div>
+          <div class="kv-row">
+            <strong class="label">Citizenship No.</strong>
+            <div>{{ per_info.citizenship_no|default:"—" }}</div>
+          </div>
+        </div>
+        <div class="col-md-4 text-md-end">
+          {% if per_info.profile_pic %}
+          <img
+            src="{{ per_info.profile_pic.url }}"
+            alt="Profile Pic"
+            class="profile-pic"
+          />
+          {% else %}
+          <img
+            src="{% static 'images/profile_pic1.jpg' %}"
+            alt="Default Profile"
+            class="profile-pic"
+          />
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">No personal information available.</div>
+    {% endif %}
+
+    <!-- Educational Info -->
+    <div class="card mb-4">
+      <div class="card-header bg-info text-white">
+        <strong>Educational Information</strong>
+      </div>
+      <div class="card-body">
+        {% if edu_info %}
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Level</th>
+              <th>Faculty</th>
+              <th>Course Name</th>
+              <th>University</th>
+              <th>College Name</th>
+              <th>Passed Year</th>
+              <th>Grade/CGPA</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for edu in edu_info %}
+            <tr>
+              <td>{{ edu.level|default:"—" }}</td>
+              <td>{{ edu.faculty|default:"—" }}</td>
+              <td>{{ edu.course_name|default:"—" }}</td>
+              <td>{{ edu.university_name|default:"—" }}</td>
+              <td>{{ edu.college_name|default:"—" }}</td>
+              <td>{{ edu.passed_year|default:"—" }}</td>
+              <td>{{ edu.grade_percent|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-warning">
+          No educational information available.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!--Citizenship Documents-->
+    <div class="citizenship-doc">
+      <h6 class="mb-3">Personal Documents</h6>
+      <div class="card" style="width: 18rem; height: 18rem">
+        <img
+          src="{{ per_info.ctz_file.url }}"
+          class="card-img-top"
+          alt="citizenship preview"
+        />
+        <a href="#" class="btn btn-primary"
+          ><i class="fa-solid fa-circle-down text-center"></i
+        ></a>
+      </div>
+    </div>
+
+    <!--Educational Documents-->
+    <div class="educational-doc py-5">
+      <h6 class="mb-3">Educational Documents</h6>
+      <div class="row">
+        <div class="col">
+          <div class="card" style="width: 18rem; height: 18rem">
+            <img
+              src="{{ edu_info.upload_transcript1.url }}"
+              class="card-img-top"
+              alt="citizenship preview"
+            />
+            <a href="#" class="btn btn-primary"
+              ><i class="fa-solid fa-circle-down text-center"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="col"></div>
+        <div class="col"></div>
+      </div>
+
+      <!--Application Approval/Rejection Detail-->
+      {% if applicant %}
+        <div class="applications-status">
+          <div class="application-status-title">Application Status</div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Degree</th>
+                <th>Course</th>
+                <th>Application No.</th>
+                <th>Application Status</th>
+                <th>Application Date</th>
+                {% if applicant.application_status == 'approved' %}
+                  <th>Approved Date</th>
+                {% elif applicant.application_status == 'rejected' %}
+                  <th>Rejection Reason</th>
+                  <th>Rejection Date</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{applicant.course.degree}}</td>
+                <td>{{applicant.course.course_name}}</td>
+                <td>{{applicant.application_no}}</td>
+                <td>{{applicant.application_status}}</td>
+                <td>{{applicant.submitted_at}}</td>
+                {% if applicant.application_status == 'approved' %}
+                  <td>{{applicant.approved_rejected_date}}</td>
+                {% elif applicant.application_status == 'rejected' %}
+                  <td>{{applicant.reason_to_reject}}</td>
+                  <td>{{applicant.approved_rejected_date}}</td>
+                {% endif %}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
+      <!-- Actions (optional) -->
+      <div class="d-flex gap-2 justify-content-center py-5">
+        <a
+          href="{% url 'course_application_list' %}"
+          class="btn btn-outline-secondary"
+          >← Back</a
+        >
+        <!--Approval Rejection form--> 
+        {% if applicant.application_status == 'pending' or applicant.application_status == 're-submit' %}
+          <form method="post" action="{% url 'approval_rejection' applicant.pk %}">
+              {% csrf_token %}
+              <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+              <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>	
+          </form>
+		    {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</div>

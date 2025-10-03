@@ -1,0 +1,58 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+{% block title %}per_info{% endblock %}
+{% block css %} <link rel="stylesheet" href="{% static 'css/personalinfo_detail.css' %}"> {% endblock css %}
+     
+{% block body %}
+  <div class="personal-info-detail-container container">
+    <div class="personal-info-text">Applicant Personal Detail</div>
+    
+    <div class="user-profile-pic py-4 text-end">
+        {% if per_info.profile_pic %} 
+            <img src="{{ per_info.profile_pic.url }}" class="text-start" alt="profile-pic">
+        {% else %}
+            <img class="text-start"  src="{% static 'images/profile_pic1.jpg' %}" alt="Default Profile">
+        {% endif %}
+    </div>
+    
+        <table class="table">
+            <tr>
+                <th>Name</th><td>{{ per_info.user.first_name}} {{ per_info.user.last_name}}</td>
+            </tr>
+            <tr>
+                <th>Address</th><td>{{ per_info.address}}</td>
+            </tr>
+            <tr>
+                <th>Date of Birth</th><td>{{ per_info.dob}}</td>
+            </tr>
+             <tr>
+                <th>Email</th><td>{{ per_info.user.email}}</td>
+            </tr>
+             <tr>
+                <th>Mobile No.</th><td>{{ per_info.user.mobile}}</td>
+            </tr>
+            <tr>
+                <th>Gender</th><td>{{ per_info.gender}}</td>
+            </tr>
+             <tr>
+                <th>Father's Name</th><td>{{ per_info.father}}</td>
+            </tr>
+             <tr>
+                <th>Mother's Name</th><td>{{ per_info.mother}}</td>
+            </tr>
+             <tr>
+                <th>GrandFather's Name</th><td>{{ per_info.grandfather}}</td>
+            </tr>
+            <tr>
+                <th>Citizenship No.</th><td>{{ per_info.citizenship_no}}</td>
+            </tr>
+            <tr>
+                <th>Created at</th><td>{{ per_info.created_at}}</td>
+            </tr>
+        </table>
+        {% if not application_approved %}
+            <div class="edit-btn text-end py-3 px-3"><a href="{% url 'edit_personalinfo' pk=per_info.pk %}" class="btn btn-primary">Edit</a></div>
+        {% endif %}    
+  
+  </div>
+{% endblock %}

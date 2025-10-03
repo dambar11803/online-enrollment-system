@@ -1,0 +1,18 @@
+{% extends 'admin/admin_base.html' %} 
+{% load static %}
+
+{% block title %} add_course {% endblock %}
+{% block css %} <link rel="stylesheet" href="{% static 'css/admin/add_course.css' %}"> {% endblock %}
+
+{% block content %}
+    <div class="add-course-container container">
+        <div class="add-course-title">Add New Course</div>
+        <div class="add-course-form">
+            <form method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Add" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+{% endblock %}

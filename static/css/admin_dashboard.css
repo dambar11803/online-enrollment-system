@@ -1,0 +1,159 @@
+/* ===============================
+   Admin Dashboard – Cards & Layout
+   File: static/css/admin_dashboard.css
+   =============================== */
+
+:root{
+  --bg: #0b1020;
+  --panel: #121933;
+  --text: #eaf0ff;
+  --muted: #aab3cf;
+  --ring: rgba(255,255,255,.08);
+  --shadow: 0 10px 25px rgba(0,0,0,.25);
+
+  /* Accent gradients for each stat (by column order) */
+  --acc-total: linear-gradient(135deg, #4f8cff, #7aa8ff);
+  --acc-approved: linear-gradient(135deg, #22c55e, #6ee7b7);
+  --acc-pending: linear-gradient(135deg, #f59e0b, #fcd34d);
+  --acc-rejected: linear-gradient(135deg, #ef4444, #fb7185);
+}
+
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f6f8ff;
+    --panel:#ffffff;
+    --text:#0e1330;
+    --muted:#5b6280;
+    --ring: rgba(0,0,0,.06);
+    --shadow: 0 8px 18px rgba(17,24,39,.08);
+  }
+}
+
+html, body{
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Container & section headings */
+.admin-container.container{
+  padding-top: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+.admin-title{
+  font-weight: 700;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  margin: 1.25rem 0 .75rem 0;
+  letter-spacing: .2px;
+  color: var(--text);
+}
+
+/* Card base */
+.card-stats{
+  position: relative;
+  background: var(--panel);
+  border-radius: 0.5rem;
+  padding: 1.6rem 1.1rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--ring);
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  min-height: 112px;
+
+  display: grid;
+  align-content: center;
+  gap: .1rem;
+}
+
+/* Left accent bar */
+.card-stats::before{
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  border-radius: 1rem 0 0 1rem;
+  background: linear-gradient(180deg, transparent, transparent);
+  opacity: .95;
+}
+
+/* Subtle background sheen */
+.card-stats::after{
+  content: "";
+  position: absolute;
+  inset: -20% -30% auto -30%;
+  height: 70%;
+  transform: rotate(-8deg);
+  background: radial-gradient(60% 60% at 50% 50%, rgba(255,255,255,.12), transparent 60%);
+  pointer-events: none;
+}
+
+/* Big number */
+.card-stats > p:first-child{
+  font-size: clamp(1.6rem, 3.6vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1;
+  margin: 0 0 .25rem 0;
+  letter-spacing: .5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Label */
+.card-stats > p:last-child{
+  margin: 0;
+  font-size: .95rem;
+  color: var(--muted);
+}
+
+/* Hover / focus */
+.card-stats:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.25);
+  border-color: rgba(255,255,255,.14);
+}
+
+/* Responsive spacing for Bootstrap rows/cols (keeps nice gutters) */
+.admin-container .row{
+  row-gap: 1rem;
+}
+.admin-container .col{
+  padding: .5rem;
+}
+
+/* -------------------------------
+   Color mapping by column order
+   (Works with your current markup)
+   ------------------------------- */
+
+/* Section 1: Applications (Total, Approved, Pending, Rejected) */
+.admin-container .row:nth-of-type(1) .col:nth-child(1) .card-stats::before{ background: var(--acc-total); }
+.admin-container .row:nth-of-type(1) .col:nth-child(2) .card-stats::before{ background: var(--acc-approved); }
+.admin-container .row:nth-of-type(1) .col:nth-child(3) .card-stats::before{ background: var(--acc-pending); }
+.admin-container .row:nth-of-type(1) .col:nth-child(4) .card-stats::before{ background: var(--acc-rejected); }
+
+/* Section 2: Courses (Total, Master, Bachelor, Plus2) */
+.admin-container .row:nth-of-type(2) .col:nth-child(1) .card-stats::before{ background: var(--acc-total); }
+.admin-container .row:nth-of-type(2) .col:nth-child(2) .card-stats::before{ background: var(--acc-approved); }
+.admin-container .row:nth-of-type(2) .col:nth-child(3) .card-stats::before{ background: var(--acc-pending); }
+.admin-container .row:nth-of-type(2) .col:nth-child(4) .card-stats::before{ background: var(--acc-rejected); }
+
+/* Optional: colored number text to match accents */
+.admin-container .row:nth-of-type(1) .col:nth-child(1) .card-stats > p:first-child{ color:#7aa8ff; }
+.admin-container .row:nth-of-type(1) .col:nth-child(2) .card-stats > p:first-child{ color:#6ee7b7; }
+.admin-container .row:nth-of-type(1) .col:nth-child(3) .card-stats > p:first-child{ color:#fcd34d; }
+.admin-container .row:nth-of-type(1) .col:nth-child(4) .card-stats > p:first-child{ color:#fb7185; }
+
+.admin-container .row:nth-of-type(2) .col:nth-child(1) .card-stats > p:first-child{ color:#7aa8ff; }
+.admin-container .row:nth-of-type(2) .col:nth-child(2) .card-stats > p:first-child{ color:#6ee7b7; }
+.admin-container .row:nth-of-type(2) .col:nth-child(3) .card-stats > p:first-child{ color:#fcd34d; }
+.admin-container .row:nth-of-type(2) .col:nth-child(4) .card-stats > p:first-child{ color:#fb7185; }
+
+/* Zero state (if you add a .is-zero class from the view conditionally) */
+.card-stats.is-zero{
+  opacity: .75;
+  filter: grayscale(.2);
+}
+
+/* Touch target improvements */
+@media (hover:none){
+  .card-stats{ padding: 1.1rem 1rem; }
+}

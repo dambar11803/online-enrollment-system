@@ -1,0 +1,180 @@
+/* Container */
+.creditor-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background: linear-gradient(to bottom right, #fdfdfd, #f2f7f9);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Heading */
+.creditor-container h2 {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Profile picture */
+.user-profile-pic {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 20px;
+}
+.user-profile-pic img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10%;
+    border: 3px solid #4CAF50;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.user-profile-pic img:hover {
+    transform: scale(1.05);
+}
+
+/* Table styling (extra on top of Bootstrap) */
+.creditor-detail table {
+    width: 100%;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+.creditor-detail th {
+    width: 20%;
+    text-align: left;
+    padding: 10px;
+    background: #d1e7dd;
+    color: #333;
+}
+.creditor-detail td {
+    padding: 10px;
+    background: #f8f9fa;
+}
+
+/* Change password button */
+.password-chg {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.btn-change-password {
+    font-size:1rem;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 25px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.btn-change-password:hover {
+    background-color: #45a049;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px);}
+    100% { opacity: 1; transform: translateY(0);}
+}
+
+/* ========== Mobile (≤ 576px) ========== */
+@media (max-width: 576px) {
+  /* Container tweaks */
+  .creditor-container {
+    max-width: 100%;
+    margin: 16px auto;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+  }
+
+  /* Heading */
+  .creditor-container h2 {
+    font-size: 1.05rem;
+    margin-bottom: 14px;
+  }
+
+  /* Profile picture: center + smaller */
+  .user-profile-pic {
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .user-profile-pic img {
+    width: 72px;
+    height: 72px;
+    border-width: 2px;
+    border-radius: 12%;
+  }
+
+  /* Table: compact + readable */
+  .creditor-detail table {
+    font-size: .95rem;
+    border-collapse: collapse; /* tighten spacing */
+  }
+  .creditor-detail th,
+  .creditor-detail td {
+    padding: 8px 10px;
+  }
+
+  /* Turn each row into a simple 2-col grid */
+  .creditor-detail tr {
+    display: grid;
+    grid-template-columns: 42% 58%;
+    gap: 6px 10px;
+  }
+
+  /* Softer header cell for mobile */
+  .creditor-detail th {
+    background: transparent;
+    color: #495057;
+    padding-top: 10px;
+  }
+  .creditor-detail td {
+    background: #f8f9fa;
+    border-radius: 6px;
+  }
+
+  /* Buttons: full width and comfy tap targets */
+  .password-chg {
+    margin-top: 16px;
+    padding-inline: 2px;
+  }
+  .btn-change-password {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px 16px;
+    font-size: .95rem;
+    border-radius: 10px;
+  }
+}
+
+/* ========== Extra small (≤ 360px) ========== */
+@media (max-width: 360px) {
+  .creditor-container {
+    padding: 12px;
+  }
+  .creditor-detail tr {
+    grid-template-columns: 1fr; /* stack label over value */
+  }
+  .creditor-detail th {
+    padding-bottom: 0;
+    font-weight: 600;
+  }
+  .creditor-detail td {
+    margin-top: 4px;
+  }
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .creditor-container {
+    animation: none;
+  }
+  .user-profile-pic img {
+    transition: none;
+  }
+}

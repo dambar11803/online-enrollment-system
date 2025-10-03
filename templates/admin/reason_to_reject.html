@@ -1,0 +1,26 @@
+{% extends 'admin/admin_base.html' %} 
+{% load static %}
+
+{% block title %} reject-reaseon {% endblock %}
+{% block css %} <link rel="stylesheet" href=""> {% endblock %}
+
+{% block content %}
+    <div class="reject-reason-form container">
+        <div class="reject-title">Reason for Rejection</div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+               
+                {{ form.reason_to_reject }}
+                {% if form.reason_to_reject.errors %}
+                    <div class="text-danger">{{ form.reason_to_reject.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-danger">Submit Reason</button>
+            <a href="{% url 'application_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+
+
+    </div>
+    
+{% endblock %}

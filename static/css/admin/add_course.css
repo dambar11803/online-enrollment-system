@@ -1,0 +1,90 @@
+/* Container styling */
+.add-course-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Title */
+.add-course-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.8rem;
+}
+
+/* Form section */
+.add-course-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Django form labels */
+.add-course-form label {
+  font-weight: 500;
+  color: #34495e;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+/* Inputs, selects, textarea */
+.add-course-form input[type="text"],
+.add-course-form input[type="number"],
+.add-course-form input[type="email"],
+.add-course-form input[type="file"],
+.add-course-form select,
+.add-course-form textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fdfdfd;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.add-course-form input:focus,
+.add-course-form select:focus,
+.add-course-form textarea:focus {
+  border-color: #198754;
+  box-shadow: 0 0 5px rgba(25,135,84,0.4);
+  outline: none;
+}
+
+/* Submit button */
+.add-course-form .btn {
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.add-course-form .btn-success {
+  background-color: #198754;
+  border: none;
+  color: #fff;
+}
+
+.add-course-form .btn-success:hover {
+  background-color: #157347;
+  transform: translateY(-2px);
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .add-course-container {
+    padding: 1.2rem;
+  }
+
+  .add-course-title {
+    font-size: 1.5rem;
+  }
+}

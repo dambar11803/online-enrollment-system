@@ -1,0 +1,90 @@
+/* Container */
+.add-update-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+.course-update-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.7rem;
+}
+
+/* Form */
+.course-update-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Labels */
+.course-update-form label {
+  font-weight: 500;
+  color: #34495e;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+/* Inputs, selects, textarea */
+.course-update-form input[type="text"],
+.course-update-form input[type="number"],
+.course-update-form input[type="email"],
+.course-update-form input[type="file"],
+.course-update-form select,
+.course-update-form textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fdfdfd;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.course-update-form input:focus,
+.course-update-form select:focus,
+.course-update-form textarea:focus {
+  border-color: #198754;
+  box-shadow: 0 0 6px rgba(25, 135, 84, 0.4);
+  outline: none;
+}
+
+/* Submit button */
+.course-update-form .btn {
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.course-update-form .btn-success {
+  background-color: #198754;
+  border: none;
+  color: #fff;
+}
+
+.course-update-form .btn-success:hover {
+  background-color: #157347;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .add-update-container {
+    padding: 1.2rem;
+  }
+
+  .course-update-title {
+    font-size: 1.5rem;
+  }
+}

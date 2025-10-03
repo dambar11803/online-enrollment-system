@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Khalti Payment</title>
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+</head>
+<body>
+    <h1>Pay with Khalti</h1>
+    <button id="payment-button">Pay Rs. {{ amount|floatformat:0|add:"0"|slice:":-2" }}</button>
+
+    <script>
+        var config = {
+            "publicKey": "{{ khalti_public_key }}",
+            "productIdentity": "{{ product_identity }}",
+            "productName": "{{ product_name }}",
+            "productUrl": window.location.href,
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT"
+            ],
+            "eventHandler": {
+                onSuccess(payload) {
+                    console.log("Payment Success:", payload);
+                    
+                    // Verify payment on backend
+                    fetch('/payments/verify/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            token: payload.token,
+                            amount: payload.amount
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Payment successful!');
+                            // Redirect to success page
+                            window.location.href = '/payments/success/';
+                        } else {
+                            alert('Payment verification failed!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred!');
+                    });
+                },
+                onError(error) {
+                    console.log("Payment Error:", error);
+                    alert('Payment failed!');
+                },
+                onClose() {
+                    console.log('Payment widget closed');
+                }
+            }
+        };
+
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        
+        btn.onclick = function () {
+            checkout.show({amount: {{ amount }}});
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+/* --- Page container --- */
+.student-dashboard {
+  padding-block: 1rem 3rem;
+}
+
+/* --- Section titles --- */
+.dashboard-title {
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 700;
+  color: #243447;
+  margin: 0 0 1rem 0;
+  padding-bottom: .5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.course-title {
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  font-weight: 600;
+  color: #2f3a4a;
+  margin: 1.5rem 0 .75rem;
+}
+
+/* --- Top stats (Total Courses, Plus2, Bachelor, Master) --- */
+.course-stat .row {
+  row-gap: 1rem;
+}
+
+.col .col-card {
+  background: linear-gradient(135deg, #f8fafc, #eef2f7);
+  border: 1px solid #e6ebf2;
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(19, 33, 68, 0.06);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; 
+  
+}
+
+.col .col-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(19, 33, 68, 0.08);
+  border-color: #d8e2ee;
+}
+
+.col .col-card p:first-child {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  color: #0d6efd; /* matches Bootstrap primary */
+  line-height: 1.1;
+}
+
+.col .col-card p:last-child {
+  margin: .35rem 0 0 0;
+  font-size: .98rem;
+  color: #5b6b7a;
+}
+
+/* --- Course lists (cards) --- */
+.row {
+  row-gap: 1.25rem; /* add vertical spacing between Bootstrap columns */
+}
+
+.card {
+  border: 1px solid #e6ebf2;
+  border-radius: 14px;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 6px 16px rgba(19, 33, 68, 0.06);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; 
+  opacity:0.5;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(19, 33, 68, 0.10);
+  border-color: #d8e2ee;
+  opacity:1;
+}
+
+.card-img-top {
+  height: 160px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 1rem 1rem 1.25rem;
+}
+
+.card-title {
+  margin-bottom: .4rem;
+  font-size: 1.05rem;
+  color: #223043;
+}
+
+.text-muted {
+  color: #6b7c8f !important;
+  margin-bottom: .25rem;
+}
+
+/* --- Apply/Detail button --- */
+.apply-btn .btn {
+  min-width: 120px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: .55rem 1rem;
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+}
+
+.apply-btn .btn:focus-visible {
+  outline: 3px solid rgba(13,110,253,.35);
+  outline-offset: 2px;
+}
+
+.apply-btn .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(13,110,253,.25);
+}
+
+/* --- Empty state text --- */
+.plus2-section .col-12 p,
+.bachelor-section .col-12 p,
+.master-section .col-12 p {
+  padding: 1rem;
+  margin: .5rem 0 0;
+  color: #6b7c8f;
+  background: #f8fafc;
+  border: 1px dashed #d6dee8;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* --- Utility spacing for sections --- */
+.plus2-section,
+.bachelor-section,
+.master-section {
+  margin-top: .75rem;
+}
+
+/* --- Small screens --- */
+@media (max-width: 576px) {
+  .course-stat .col .col-card {
+    padding: .9rem 1rem;
+  }
+  .card-img-top {
+    height: 140px;
+  }
+}
+
+/* --- Optional dark mode (respects user system setting) --- */
+@media (prefers-color-scheme: dark) {
+  .dashboard-title { color: #e9eef5; border-color: #2c3440; }
+  .course-title { color: #d8e2ee; }
+
+  .col .col-card {
+    background: linear-gradient(135deg, #1d2430, #212a36);
+    border-color: #313b49;
+    box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  }
+  .col .col-card p:first-child { color: #6ea8fe; }
+  .col .col-card p:last-child { color: #a9b5c3; }
+
+  .card { border-color: #313b49; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+  .card:hover { box-shadow: 0 12px 28px rgba(0,0,0,.45); border-color: #3a4556; }
+  .card-title { color: #e6edf6; }
+  .text-muted { color: #a9b5c3 !important; }
+
+  .plus2-section .col-12 p,
+  .bachelor-section .col-12 p,
+  .master-section .col-12 p {
+    color: #a9b5c3;
+    background: #1c2430;
+    border-color: #313b49;
+  }
+}

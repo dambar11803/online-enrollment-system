@@ -1,0 +1,401 @@
+/* Personal Info Detail Page Styles */
+.personalinfo-detail-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Header Section */
+.personalinfo-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    animation: slideInRight 0.8s ease-out 0.2s both;
+}
+
+.personalinfo-text::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border-radius: 2px;
+    animation: shimmer 2s infinite;
+    background-size: 200% 100%;
+}
+
+/* Edit Button */
+.edit-btn {
+    animation: slideInRight 0.8s ease-out 0.4s both;
+}
+
+.edit-btn .btn {
+    padding: 8px 30px;
+    font-weight: 300; 
+    font-size:15px;
+    /* border-radius: 50px; */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.edit-btn .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.edit-btn .btn:hover::before {
+    left: 100%;
+}
+
+.edit-btn .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.4);
+    animation: pulse 1.5s infinite;
+}
+
+.edit-btn .btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+/* Profile Picture Section */
+.user-profile-pic {
+    /* display: flex;
+    justify-content: flex-end; */
+    animation: slideInRight 0.8s ease-out 0.6s both;
+}
+
+.user-profile-pic img {
+    width: 200px;
+    height: 200px;
+    /* border-radius: 50%; */
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.user-profile-pic img::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(0, 123, 255, 0.1), rgba(0, 86, 179, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* .user-profile-pic img:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 20px 40px rgba(0, 123, 255, 0.3);
+    border-color: #007bff;
+} */
+
+.user-profile-pic img:hover::before {
+    opacity: 1;
+}
+
+/* Table Styles */
+.table {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-out 0.8s both;
+    border: none;
+    margin-top: 2rem;
+}
+
+.table tr {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.table tr::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    transition: width 0.3s ease;
+}
+
+.table tr:hover::after {
+    width: 100%;
+}
+
+.table tr:hover {
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.05), rgba(0, 86, 179, 0.05));
+    transform: translateX(5px);
+}
+
+.table th {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-weight: 600;
+    padding: 20px;
+    border: none;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    width: 30%;
+}
+
+.table th::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.table td {
+    padding: 20px;
+    border: none;
+    color: #555;
+    font-weight: 500;
+    position: relative;
+}
+
+.table td::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #007bff, #0056b3);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.table tr:hover td::before {
+    transform: scaleY(1);
+}
+
+/* Alternating row colors */
+.table tr:nth-child(even) {
+    background-color: rgba(0, 123, 255, 0.02);
+}
+
+.table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+/* Loading effect for table rows */
+.table tr {
+    opacity: 0;
+    animation: tableRowFadeIn 0.6s ease-out forwards;
+}
+
+.table tr:nth-child(1) { animation-delay: 0.1s; }
+.table tr:nth-child(2) { animation-delay: 0.2s; }
+.table tr:nth-child(3) { animation-delay: 0.3s; }
+.table tr:nth-child(4) { animation-delay: 0.4s; }
+.table tr:nth-child(5) { animation-delay: 0.5s; }
+.table tr:nth-child(6) { animation-delay: 0.6s; }
+.table tr:nth-child(7) { animation-delay: 0.7s; }
+.table tr:nth-child(8) { animation-delay: 0.8s; }
+
+@keyframes tableRowFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .personalinfo-detail-container {
+        padding: 0 0.5rem;
+    }
+    
+    .personalinfo-text {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .user-profile-pic {
+        justify-content: center;
+        padding: 2rem 0;
+    }
+    
+    .user-profile-pic img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .edit-btn {
+        text-align: center !important;
+        padding: 1rem 0;
+    }
+    
+    .table th,
+    .table td {
+        padding: 15px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .table th {
+        width: 35%;
+    }
+}
+
+@media (max-width: 576px) {
+    .personalinfo-text {
+        font-size: 1.8rem;
+    }
+    
+    .user-profile-pic img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .table {
+        font-size: 0.8rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 12px 8px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .edit-btn {
+        display: none;
+    }
+    
+    .personalinfo-detail-container {
+        box-shadow: none;
+        animation: none;
+    }
+    
+    .table tr:hover {
+        background: none;
+        transform: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .personalinfo-detail-container {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+    
+    .personalinfo-text {
+        color: #f0f0f0;
+    }
+    
+    .table {
+        background: #2d2d2d;
+        color: #e0e0e0;
+    }
+    
+    .table td {
+        color: #ccc;
+    }
+    
+    .table tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .table tr:nth-child(odd) {
+        background-color: #2d2d2d;
+    }
+}
+
+/* Focus states for accessibility */
+.edit-btn .btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .table th {
+        background: #000;
+        color: #fff;
+    }
+    
+    .table tr:hover {
+        background: #f0f0f0;
+    }
+}

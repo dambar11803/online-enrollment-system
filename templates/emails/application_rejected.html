@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>approved_notification</title>
+  </head>
+  <body>
+    <div class="email-to-send container">
+      {% if status|default:application.application_status == "approved" %}
+      <p style="margin: 0 0 12px 0; font-size: 15px">
+        🎉 Congratulations!, {{user.full_name}} <br>
+        Your application for
+        <strong
+          >{{ course_name|default:application.course.course_name }}</strong
+        >
+        has been <strong>approved</strong>.
+      </p>
+      <div class="course-details">
+        <table class="table table-bordered">
+            <tr>
+                <th>Application No.</th><td>{{application.application_no}}</td>
+            </tr>
+            <tr>
+                <th>Degree</th><td>{{application.course.degree}}</td>
+            </tr>
+            <tr>
+                <th>Course</th><td>{{application.course.course_name}}</td>
+            </tr>
+            <tr>
+                <th>Course Full Fee</th><td>{{application.course.course_fee}}</td>
+            </tr>
+            <tr>
+                <th>Application submitted Date</th><td>{{application.submitted_at}}</td>
+            </tr>
+            <tr>
+                <th>Application Approved Date</th><td>{{application.approved_rejected_date}}</td>
+            </tr>
+        </table>
+      </div>
+      <p>You can proceed for further payment process.</p>
+
+      {% elif status|default:application.application_status == "rejected" %}
+      <p style="margin: 0 0 12px 0; font-size: 15px">
+        Thank you for applying to
+        <strong>{{ course_name|default:application.course.course_name }}</strong
+        >. After careful consideration, we’re sorry to inform you that your
+        application has been <strong>rejected</strong> on {{application.approved_rejected_date}}.
+        Please, re-submit the application after the following correction. 
+        <p style="margin: 0 0 12px 0; font-size: 15px">Correction to be Made:{{application.reason_to_reject}}</p>
+      </p>
+      {% endif %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+{% block title %}
+  educationalinfo
+{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/educationalinfo_detail' %}" />
+{% endblock %}
+
+{% block body %}
+  <div class="educationalinfo-detail-container container">
+    <div class="educationalinfo-text">Applicant Educational Detail</div>
+    <div class="back-btn text-end py-3"><a href="{% url 'education_list' %}" class="btn btn-primary">Education List</a></div>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <td class="text-center">{{ edu.level }}</td>
+        </tr>
+        <tr>
+          <th class="text-center">Degree</th>
+          <td class="text-center">{{ edu.course_name }}</td>
+        </tr>
+        <tr>
+          <th class="text-center">Faculty</th>
+          <td class="text-center">{{ edu.faculty }}</td>
+        </tr>
+        <tr>
+          <th class="text-center">University</th>
+          <td class="text-center">{{ edu.university_name }}</td>
+        </tr>
+        <tr>
+          <th class="text-center">College Name</th>
+          <td class="text-center">{{ edu.college_name }}</td>
+        </tr>
+        <tr>
+          <th class="text-center">Passed Year</th>
+          <td class="text-center">{{ edu.passed_year }}</td>
+        </tr>
+        <tr>
+          <th class="text-center">Grade</th> <td class="text-center">{{ edu.grade_percent }}</td>
+        </tr>
+      </thead>
+    </table>
+
+   
+  </div>
+{% endblock %}

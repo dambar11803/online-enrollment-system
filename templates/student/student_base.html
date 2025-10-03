@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+      {% block title %}
+        student-base
+      {% endblock %}
+    </title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- App CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+
+    {% block css %}
+
+    {% endblock %}
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark me-auto">
+      <div class="container-fluid px-3">
+        <a class="navbar-brand d-none d-lg-block" href="{% url 'student_dashboard' %}">Online Admission System</a>
+
+        <div class="navbar-links">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}" href="{% url 'student_dashboard' %}" aria-current="{% if request.resolver_match and request.resolver_match.url_name == 'student_dashboard' %}page{% endif %}"><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'personal_info' %}active{% endif %}" href="{% url 'personal_info' %}" aria-current="{% if request.resolver_match and request.resolver_match.url_name == 'personal_info' %}page{% endif %}"><i class="fa-solid fa-user-plus"></i> <span>Personal Info</span></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'education_list' %}active{% endif %}" href="{% url 'education_list' %}" aria-current="{% if request.resolver_match and request.resolver_match.url_name == 'education_list' %}page{% endif %}"><i class="fa-solid fa-user-graduate"></i> <span>Education Info</span></a>
+            </li>
+
+            <li class="nav-item">
+              {# TODO: replace 'apply' with your real route name, or remove this item #}
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'admission' %}active{% endif %}" href="{% url 'application_list' %}"><i class="fa-solid fa-list"></i> <span>Application</span></a>
+            </li>
+
+            <li class="nav-item d-flex align-items-center ms-2">
+              {% if request.user.is_authenticated and request.user.personal_info.profile_pic %}
+                <a href="{% url 'profile' %}"><img src="{{ request.user.personal_info.profile_pic.url }}" alt="profile-pic" class="rounded-circle profile-img" /></a>
+              {% else %}
+                <a href="{% url 'profile' %}"><img src="{% static 'images/default_pic.png' %}" alt="Profile" class="rounded-circle profile-img" /></a>
+              {% endif %}
+            </li>
+
+            <li class="nav-item d-flex align-items-center ms-2">
+              <a href="{% url 'logout' %}" class="nav-link"><i class="fa-solid fa-arrow-right-from-bracket text-bg-danger py-1 mt-1"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-container py-5">
+      <!-- Flash messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% block body %}
+
+      {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-light py-5">
+      <div class="container">
+        <div class="row g-4 align-items-start">
+          <!-- About (hidden on mobile) -->
+          <div class="col-12 col-md-3">
+            <div class="about-app-footer">
+              <div class="app-info fw-bold fs-5">About App</div>
+              <p class="app-info-intro mt-3">A simple web app designed to help you track, manage, and analyze debts. Stay organized with debtor records, monitor payments, and generate insightful reports for control.</p>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="col-6 col-md-3">
+            <div class="quick-links-footer">
+              <div class="quick-links-title fw-bold mb-3">Quick Links</div>
+              <ul class="list-unstyled">
+                <li>
+                  <a href="{% url 'student_dashboard' %}" class="text-light">Dashboard</a>
+                </li>
+                <li>
+                  <a href="" class="text-light">Add Debtor</a>
+                </li>
+                <li>
+                  <a href="" class="text-light">Debtor List</a>
+                </li>
+                <li>
+                  <a href="" class="text-light">Transactions</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Policy Download -->
+          <div class="col-6 col-md-3">
+            <div class="download-footer">
+              <div class="download-footer-title fw-bold mb-3">Download</div>
+              <ul class="list-unstyled">
+                <li>
+                  <a href="" target="_blank" class="text-light">Manual</a>
+                </li>
+
+                <li>
+                  <a href="" class="text-light">Terms and Conditions</a>
+                </li>
+                <li>
+                  <a href="#" class="text-light text-decoration-none">Feedback</a>
+                </li>
+                <li>
+                  <a href="#" class="text-light text-decoration-none">Policy</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="col-6 col-md-3">
+            <div class="contact-footer">
+              <div class="contact-footer-title fw-bold mb-3">Contact</div>
+              <ul class="list-unstyled">
+                <li>
+                  <i class="fa-solid fa-location-dot me-2"></i> Itahari-20, Koshi, Nepal
+                </li>
+                <li>
+                  <i class="fa-solid fa-envelope me-2"></i>
+                  <a href="mailto:raidamb2@gmail.com" class="text-light text-decoration-none">raidamb2@gmail.com</a>
+                </li>
+                <li>
+                  <i class="fa-solid fa-globe me-2"></i>
+                  <a href="http://www.dambarrai.com.np" class="text-light text-decoration-none">www.dambarrai.com.np</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <hr class="text-danger" />
+
+        <div class="row align-items-center">
+          <div class="col">
+            <div class="col-12 footer-bottom text-center text-md-start">
+              <small>© 2025 Personal Debt Manager | All Rights Reserved | Dambar Chamling.</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-4">
+            <div class="social-footer-links text-center text-md-end">
+              <ul class="social-links list-inline m-0">
+                <li class="list-inline-item">
+                  <a href="https://www.facebook.com/dambar.chamling" target="_blank" class="social-link" rel="noopener"><i class="fa-brands fa-facebook text-primary"></i></a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#" target="_blank" class="social-link" rel="noopener"><i class="fa-brands fa-linkedin text-danger"></i></a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="https://www.dambarrai.com.np" target="_blank" class="social-link" rel="noopener"><i class="fa-solid fa-globe text-success"></i></a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="https://github.com/dambar11803" target="_blank" class="social-link" rel="noopener"><i class="fa-brands fa-github text-secondary"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS (matching 5.3.7) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-2C1tX2g1S9H0jO7w6s7o7N9r7d1Y3HkqkUOq6hQxO9j8m9g9l2JwU2Iu2QdCv5m8" crossorigin="anonymous"></script>
+
+    <!-- Auto-dismiss alerts -->
+    <script>
+      setTimeout(function () {
+        document.querySelectorAll('.alert').forEach(function (alert) {
+          const bsAlert = bootstrap.Alert.getOrCreateInstance(alert)
+          bsAlert.close()
+        })
+      }, 2000)
+    </script>
+
+    <!-- Highlight active navbar link -->
+    <script>
+      ;(function () {
+        function normalizePath(url) {
+          try {
+            const u = new URL(url, window.location.origin)
+            let p = u.pathname.replace(/\/+$/, '')
+            return p === '' ? '/' : p
+          } catch {
+            return url
+          }
+        }
+      
+        const links = Array.from(document.querySelectorAll('.navbar .nav-link'))
+        const current = normalizePath(location.pathname)
+      
+        function clearActive() {
+          links.forEach((a) => {
+            a.classList.remove('active')
+            a.removeAttribute('aria-current')
+          })
+        }
+      
+        function markActiveByURL() {
+          clearActive()
+          let best = null,
+            bestLen = -1
+          links.forEach((a) => {
+            const href = a.getAttribute('href')
+            if (!href) return
+            const path = normalizePath(href)
+            const isMatch = current === path || current.startsWith(path + '/')
+            if (isMatch && path.length > bestLen) {
+              best = a
+              bestLen = path.length
+            }
+          })
+          if (best) {
+            best.classList.add('active')
+            best.setAttribute('aria-current', 'page')
+          }
+        }
+      
+        markActiveByURL()
+      
+        document.addEventListener(
+          'click',
+          function (e) {
+            const a = e.target.closest('.navbar .nav-link')
+            if (!a) return
+            clearActive()
+            a.classList.add('active')
+            a.setAttribute('aria-current', 'page')
+          },
+          { passive: true }
+        )
+      })()
+    </script>
+
+    {% block extra_js %}
+
+    {% endblock %}
+  </body>
+</html>

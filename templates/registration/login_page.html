@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% load static %}
+{% load socialaccount %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>online admission system</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/static/css/login.css" />
+  </head>
+  <body>
+    <main class="main-layout">
+      <!-- Left section: Intro -->
+      <section class="intro-section">
+        <h3 class="project-title">Online Admission System</h3>
+        <p class="project-intro">
+          Digital Admission Management.<br> From registration to approval — all online.
+          
+        </p>
+      </section>
+
+      <!-- Right section: Login form -->
+      <section class="login-section">
+        <div class="login-container">
+          <header class="login-header">
+            <h3 class="login-text">Login</h3>
+          </header>
+
+          <div class="login-body">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              {% if form.non_field_errors %}
+                <div class="alert">
+                  {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="form-group">
+                <label for="id_username">{{ form.username.label }}</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                  <div class="error-message">
+                    {% for error in form.username.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="form-group">
+                <label for="id_password">{{ form.password.label }}</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                  <div class="error-message">
+                    {% for error in form.password.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+
+              <button type="submit" class="login-btn">Login</button>
+
+              <div class="extra-links">
+                <a href="">Forgot Password?</a>
+              </div>
+            </form>
+          </div>
+          <!-- social media login -->
+         
+          <span class="login-divider">Or login with</span>
+          <div class="social-media-login">
+            <a href="{% provider_login_url 'google' %}" class="google-btn"><i class="fa-brands fa-google"></i>Google</a>
+          </div>
+
+          <footer class="login-footer">
+            Don't have an account?
+            <a href="{% url 'register' %}">Register</a>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

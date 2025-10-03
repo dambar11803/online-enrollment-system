@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Payment Success</title>
+</head>
+<body>
+  <h1>✅ Payment Successful</h1>
+  <p><strong>Course:</strong> {{ course_name }}</p>
+  <p><strong>Order ID:</strong> {{ order_id }}</p>
+  <p><strong>Amount (NPR):</strong> {{ amount_rs|floatformat:2 }}</p>
+  <p><strong>PIDX:</strong> {{ resp.pidx }}</p>
+  <p><strong>Status:</strong> {{ resp.status }}</p>
+  <pre style="background:#f7f7f7;padding:10px;border:1px solid #ddd;">
+    {{ resp|safe }}
+  </pre>
+  <a href="/">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends 'admin/admin_base.html' %} 
+{% load static %}
+
+{% block title %} admin_dashboard {% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="admin-container container">
+        <div class="admin-title pb-5">Applications Detail</div>
+        <div class="row">
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{total_applications}}</p>
+                    <p>Total Applications</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{approved_applications}}</p>
+                    <p>Approved Applications</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{pending_applications}}</p>
+                    <p>Pending Applications</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{rejected_applications}}</p>
+                    <p>Rejected Applications</p>
+                </div>
+            </div>
+        </div>
+
+        <!--Second Section:Courses Stats-->
+         <div class="admin-title py-5">Total Course Detail</div>
+        <div class="row">
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{total_course}}</p>
+                    <p>Total Courses</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{total_master_course}}</p>
+                    <p>Total Master Courses</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{total_bachelor_course}}</p>
+                    <p>Total Bachelor Courses</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card-stats py-5">
+                    <p class="pb-2">{{total_plus2_course}}</p>
+                    <p>Total Plus2 Courses</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

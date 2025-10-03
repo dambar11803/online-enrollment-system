@@ -1,0 +1,147 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+
+{% block title %}education-list{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/educationalinfo_detail.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="educationalinfo-list-container container py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="educationalinfo-text mb-0">Applicant Educational Detail</h3>
+    <div class="add-btn">
+     {% if not application_approved %}
+       {% if education_count <= 6 %}
+        
+        <a href="{% url 'educational_info' %}" class="btn btn-primary">Add Education</a>
+      {% else %}
+        pass
+      {% endif %}
+
+     {% endif %}
+    </div>
+  </div>
+
+  <table class="table table-bordered align-middle">
+    <thead class="table-light">
+      <tr>
+        <th class="text-center">Level</th>
+        <th class="text-center">Degree</th>
+        <th class="text-center">Faculty</th>
+        <th class="text-center">University</th>
+        <th class="text-center">College Name</th>
+        <th class="text-center">Passed Year</th>
+        <th class="text-center">Grade/CGPA</th>
+        <th class="text-center">Detail</th>
+        <th class="text-center">Edit</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {# SEE #}
+      {% for edu in see_details %}
+        <tr>
+          <td class="text-center">{{ edu.level }}</td>
+          <td class="text-center">{{ edu.course_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.faculty|default:"-" }}</td>
+          <td class="text-center">{{ edu.university_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.college_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.passed_year|default:"-" }}</td>
+          <td class="text-center">{{ edu.grade_percent|default:"-" }}</td>
+          <td class="text-center">
+            <a class="btn btn-sm btn-outline-primary"
+               href="{% url 'educationalinfo_detail' pk=edu.pk %}">Detail</a>
+          </td>
+          <td class="text-center">
+            {% if application_approved %}
+              <a href="#" class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">Edit</a>
+            {% else %}  
+              <a href="{% url 'edit_educationalinfo' pk=edu.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+            {% endif %}  
+          </td>
+        </tr>
+        
+      {% empty %}
+        {# Only show an empty row if all groups are empty. We handle that after all loops. #}
+      {% endfor %}
+
+      {# Plus2 #}
+      {% for edu in plus2_details %}
+        <tr>
+          <td class="text-center">{{ edu.level }}</td>
+          <td class="text-center">{{ edu.course_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.faculty|default:"-" }}</td>
+          <td class="text-center">{{ edu.university_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.college_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.passed_year|default:"-" }}</td>
+          <td class="text-center">{{ edu.grade_percent|default:"-" }}</td>
+          <td class="text-center">
+            <a class="btn btn-sm btn-outline-primary"
+               href="{% url 'educationalinfo_detail' pk=edu.pk %}">Detail</a>
+          </td>
+          <td class="text-center">
+            {% if application_approved %}
+              <a href="#" class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">Edit</a>
+            {% else %}  
+              <a href="{% url 'edit_educationalinfo' pk=edu.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+            {% endif %} 
+          </td>
+        </tr>
+      {% endfor %}
+
+      {# Bachelor #}
+      {% for edu in bachelor_details %}
+        <tr>
+          <td class="text-center">{{ edu.level }}</td>
+          <td class="text-center">{{ edu.course_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.faculty|default:"-" }}</td>
+          <td class="text-center">{{ edu.university_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.college_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.passed_year|default:"-" }}</td>
+          <td class="text-center">{{ edu.grade_percent|default:"-" }}</td>
+          <td class="text-center">
+            <a class="btn btn-sm btn-outline-primary"
+               href="{% url 'educationalinfo_detail' pk=edu.pk %}">Detail</a>
+          </td>
+          <td class="text-center">
+            {% if application_approved %}
+              <a href="#" class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">Edit</a>
+            {% else %}  
+              <a href="{% url 'edit_educationalinfo' pk=edu.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+            {% endif %} 
+          </td>
+        </tr>
+      {% endfor %}
+
+      {# Master #}
+      {% for edu in master_details %}
+        <tr>
+          <td class="text-center">{{ edu.level }}</td>
+          <td class="text-center">{{ edu.course_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.faculty|default:"-" }}</td>
+          <td class="text-center">{{ edu.university_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.college_name|default:"-" }}</td>
+          <td class="text-center">{{ edu.passed_year|default:"-" }}</td>
+          <td class="text-center">{{ edu.grade_percent|default:"-" }}</td>
+          <td class="text-center">
+            <a class="btn btn-sm btn-outline-primary"
+               href="{% url 'educationalinfo_detail' pk=edu.pk %}">Detail</a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'edit_educationalinfo' pk=edu.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+          </td>
+        </tr>
+      {% endfor %}
+
+      {# Show a single empty state row if ALL groups are empty #}
+      {% if not see_details and not plus2_details and not bachelor_details and not master_details %}
+        <tr>
+          <td colspan="8" class="text-center text-muted">No educational records yet.</td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'admin/admin_base.html' %} 
+{% load static %}
+
+{% block title %} total_approved_report {% endblock %}
+{% block css %} <link rel="stylesheet" href=" "> {% endblock %}
+
+{% block content %}
+    <div class="total-approved-section container">
+        <div class="total-approved-title">Approved Applications</div>
+        <div class="back-btn text-end py-3"><a href="{% url 'reports' %}" class="btn btn-outline-primary">Back</a></div>
+        <table class="table table-bordered align-middle">
+      <thead>
+        <tr>
+          <th>Sn</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Application No.</th>
+          <th>Applied Course</th>
+          <th>Applied Degree</th>
+          <th>Application Status</th>
+          <th>Submitted Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for qs in qs %}
+            <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ qs.user.full_name }}</td>
+            <td>{{ qs.user.mobile }}</td>
+            <td>{{ qs.application_no }}</td>
+            <td>{{ qs.course.course_name }}</td>
+            <td>{{ qs.course.degree }}</td>
+            <td>{{ qs.application_status }}</td>
+            <td>{{ qs.submitted_at }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="9" class="text-center text-muted">No Applications found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+    </div>
+{% endblock %}

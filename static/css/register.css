@@ -1,0 +1,184 @@
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('/static/images/debt_bg.jpg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    min-height: 100vh; 
+    margin: 0; 
+    opacity: 0.9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* color:grey; */
+}
+
+label, h1, h2, h3, h4, h5, h6, p, div {
+    color: #555 !important;
+}
+
+/* Registration page container */
+.registration-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;   /* <-- Center vertically */
+    padding: 40px 20px;
+    width: 100%;
+    min-height: 100vh;     /* <-- Ensure full height */
+    box-sizing: border-box;
+}
+
+.registration-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 700px;
+    width: 100%;
+}
+
+.registration-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.registration-header h3 {
+    font-size: 25px;
+    color: #333;
+}
+
+/* Style the form */
+.registration-body form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 30px;
+}
+
+/* Each form-group takes a grid cell */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels and inputs */
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #444;
+    font-size:0.8rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 250px;   /* limit input field width */
+    width: 100%;        /* still responsive */
+    box-sizing: border-box;
+    color:grey;
+}
+
+/* Error messages */
+.error-message {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* Submit button spans full width */
+
+.submit-btn {
+    grid-column: 1 / -1;
+    padding: 12px 20px;
+    background: #657ff3;
+    color: #fff;
+    border: none;
+    border-radius: 1px;
+    cursor: pointer;
+    font-size: 15px;
+    width:100%;
+    transition: background 0.3s;
+}
+
+.submit-btn:hover {
+    background: #3c58d9;
+    font-weight: bold; 
+}
+
+/* google link */
+.social-media-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;  /* space between icon & button */
+    margin-top: 10px;
+    font-size: 0.8rem;
+}
+
+/* Google icon */
+.social-media-login i {
+    font-size: 20px;
+    color: #DB4437;  /* Google red */
+    transition: transform 0.3s, color 0.3s;
+}
+
+.social-media-login i:hover {
+    transform: scale(1.2);
+    color: #c23321;
+}
+
+/* Google button */
+.google-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* gap: 4px; */
+    padding: 8px 8px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #444;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.google-btn:hover {
+    background: #f7f7f7;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Footer */
+.registration-footer {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.registration-footer a {
+    color: #4a6bff;
+    text-decoration: underline;
+}
+
+.registration-footer a:hover {
+    text-decoration: underline;
+    color:red;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .registration-body form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .registration-body form {
+        grid-template-columns: 1fr;
+    }
+}

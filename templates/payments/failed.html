@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Payment Failed</title>
+</head>
+<body>
+  <h1>❌ Payment Not Completed</h1>
+  <p><strong>Status:</strong> {{ resp.status }}</p>
+  <p><strong>Message:</strong> {{ resp.detail|default:"Verification failed or payment pending." }}</p>
+  <a href="/">Try Again</a>
+</body>
+</html>

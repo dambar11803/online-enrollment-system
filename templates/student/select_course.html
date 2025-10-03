@@ -1,0 +1,64 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+  course_detail
+{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="" />
+{% endblock %}
+
+{% block body %}
+  <div class="course-select-container container">
+    <div class="course-select-title py-2">Couse Detail</div>
+    <div class="back-btn text-end">
+      <a href="{% url 'student_dashboard' %}" class="btn btn-outline-primary my-3">Back</a>
+    </div>
+    <div class="course">
+      <table class="table"> 
+            <tr>
+                <th>Degree</th><td>{{ course_info.degree }}</td>
+            </tr>
+            <tr>
+                <th>Course Name</th><td>{{ course_info.course_name}}</td>
+            </tr>
+            <tr>
+                <th>Course Code</th><td>{{ course_info.course_code}}</td>
+            </tr>
+             <tr>
+                <th>Course Duration</th><td>{{ course_info.course_duration}}</td>
+            </tr>
+             <tr>
+                <th>Total Seats</th><td>{{ course_info.total_seats}}</td>
+            </tr>
+            <tr>
+                <th>Remaining Seats</th><td>{{ course_info.remaining_seat}}</td>
+            </tr>
+             <tr>
+                <th>Course Total Fee</th><td>Rs.{{ course_info.course_fee}}</td>
+            </tr>
+             <tr>
+                <th>Courses Added At</th><td>{{ course_info.course_add_date}}</td>
+            </tr>
+            <tr>
+                <th>Course Description</th><td>{{ course_info.course_desc}}</td>
+            </tr>
+            <tr>
+                <th>Minimum Requirement</th><td>
+                  {{ course_info.min_requirement|default:"No Specific requirements."|linebreaks}}</td>
+            </tr>
+
+        </table>
+
+        {% if has_personal_info and has_edu_info and course_info.seats_filled < course_info.total_seats %}
+          <div class="apply-btn text-center px-5">
+            <a href="{% url 'apply_course' pk=course_info.pk %}" class="btn btn-outline-primary">Apply</a>
+          </div>
+        {% else %}  
+         <div class="apply-btn text-center">
+          <button class="btn btn-outline-secondary px-5" disabled> Apply</button>
+         </div>
+        {% endif %}
+    </div>
+  </div>
+{% endblock %}

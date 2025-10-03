@@ -1,0 +1,63 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    {% comment %} <link rel="stylesheet" href="{% static 'css/register.css' %}" /> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/static/css/register.css"/>
+  </head>
+  <body>
+    <div class="registration-page">
+      <div class="registration-container">
+        <div class="registration-header">
+          <h3 py-5>Create Account</h3>
+        </div>
+
+        <div class="registration-body">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Non-field errors -->
+            {% if form.non_field_errors %}
+              <div class="alert">
+                {% for error in form.non_field_errors %}
+                  <div>{{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <!-- Loop through fields -->
+            {% for field in form %}
+              <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="error-message">
+                    {% for error in field.errors %}
+                      {{ error }}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+            <div class="action-row">
+              <button type="submit" class="submit-btn">Register</button>
+            </div>
+          </form>
+          <!-- social media login -->
+          {% comment %} <span class="login-divider">Or login with</span> {% endcomment %}
+          <div class="social-media-login">
+            Or register with<a href="#" class="google-btn"><i class="fa-brands fa-google"></i>oogle</a>
+          </div>
+        </div>
+        <div class="registration-footer">
+          Already have an account? <a href="{% url 'login_page' %}"><span color="blue">Login</span></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
