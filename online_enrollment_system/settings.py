@@ -28,12 +28,14 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [] 
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]  
+
+# Expiry: 24 hours (synchronize with the template’s text)
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 24
 
 AUTH_USER_MODEL = "admissionapp.CustomUser"
 
-# --- django-allauth essentials ---
-SITE_ID = 1
+
 
 
 # Application definition
@@ -49,8 +51,7 @@ INSTALLED_APPS = [
 
 MY_APPS = [
     'admissionapp',
-    "django.contrib.humanize",
-    
+    "django.contrib.humanize",   
     # allauth core
     "django.contrib.sites",
     "allauth",
@@ -60,6 +61,11 @@ MY_APPS = [
     # Google provider (REQUIRED to avoid "unknown provider: google")
     "allauth.socialaccount.providers.google",
 ]
+
+# --- django-allauth essentials ---
+SITE_ID = 1 
+
+
 
 INSTALLED_APPS.extend(MY_APPS)
 
@@ -173,8 +179,10 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = ["static"]
 
 # Media Setting
+    
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -207,3 +215,26 @@ KHALTI_SECRET_KEY = config("KHALTI_SECRET_KEY")
 # KPG-2 base and endpoints (current docs use /epayment)
 KHALTI_INITIATE_URL = f"{KHALTI_BASE}/epayment/initiate/"
 KHALTI_LOOKUP_URL = f"{KHALTI_BASE}/epayment/lookup/"
+
+
+# E-Sewa Settings 
+# eSewa Configuration - RC Environment (Test)
+# ESEWA_FORM_URL   = "https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+# ESEWA_STATUS_URL = "https://rc.esewa.com.np/api/epay/transaction/status/"
+# ESEWA_PRODUCT_CODE = "EPAYTEST"  
+# ESEWA_SECRET_KEY = "8gBm/:&EnhH.1/q("  
+
+# ESEWA_PRODUCT_CODE = config("ESEWA_PRODUCT_CODE").strip()     
+# ESEWA_SECRET_KEY   = config("ESEWA_SECRET_KEY").strip()
+# ESEWA_FORM_URL     = config("ESEWA_FORM_URL").strip()      
+# ESEWA_STATUS_URL   = config("ESEWA_STATUS_URL").strip() 
+
+
+# For TEST environment
+ESEWA_FORM_URL = "https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+ESEWA_STATUS_URL = "https://rc-epay.esewa.com.np/api/epay/transaction/status/"
+ESEWA_SECRET_KEY = "8gBm/:&EnhH.1/q"
+ESEWA_PRODUCT_CODE = "EPAYTEST"
+
+
+

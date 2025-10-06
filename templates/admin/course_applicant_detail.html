@@ -1,5 +1,10 @@
-{% extends 'admin/admin_base.html' %} {% load static %} {% load humanize %}
-{%block title %}applicant-detail{% endblock %} {% block css %}
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}applicant-detail{% endblock %}
+
+{% block css %}
 <style>
   .applicant-detail .profile-pic {
     width: 150px;
@@ -32,7 +37,9 @@
     object-fit: cover;
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <div class="applicant-detail">
   <div class="container mt-4">
     <h2 class="mb-4">Course Applicant Detail</h2>
@@ -41,16 +48,12 @@
     <div class="card mb-4">
       <div class="card-header bg-primary text-white">
         <strong>Application Information</strong>
-        <small class="opacity-75"
-          >Submitted {{ applicant.created_at|naturaltime }}</small
-        >
+        <small class="opacity-75">Submitted {{ applicant.created_at|naturaltime }}</small>
       </div>
       <div class="card-body">
         <div class="kv-row">
           <strong class="label">Applicant</strong>
-          <div>
-            {{ applicant.user.get_full_name|default:applicant.user.username }}
-          </div>
+          <div>{{ applicant.user.get_full_name|default:applicant.user.username }}</div>
         </div>
         <div class="kv-row">
           <strong class="label">Email</strong>
@@ -106,23 +109,15 @@
         </div>
         <div class="col-md-4 text-md-end">
           {% if per_info.profile_pic %}
-          <img
-            src="{{ per_info.profile_pic.url }}"
-            alt="Profile Pic"
-            class="profile-pic"
-          />
+            <img src="{{ per_info.profile_pic.url }}" alt="Profile Pic" class="profile-pic" />
           {% else %}
-          <img
-            src="{% static 'images/profile_pic1.jpg' %}"
-            alt="Default Profile"
-            class="profile-pic"
-          />
+            <img src="{% static 'images/profile_pic1.jpg' %}" alt="Default Profile" class="profile-pic" />
           {% endif %}
         </div>
       </div>
     </div>
     {% else %}
-    <div class="alert alert-warning">No personal information available.</div>
+      <div class="alert alert-warning">No personal information available.</div>
     {% endif %}
 
     <!-- Educational Info -->
@@ -132,132 +127,157 @@
       </div>
       <div class="card-body">
         {% if edu_info %}
-        <table class="table table-bordered table-hover align-middle">
-          <thead class="table-light">
-            <tr>
-              <th>Level</th>
-              <th>Faculty</th>
-              <th>Course Name</th>
-              <th>University</th>
-              <th>College Name</th>
-              <th>Passed Year</th>
-              <th>Grade/CGPA</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for edu in edu_info %}
-            <tr>
-              <td>{{ edu.level|default:"—" }}</td>
-              <td>{{ edu.faculty|default:"—" }}</td>
-              <td>{{ edu.course_name|default:"—" }}</td>
-              <td>{{ edu.university_name|default:"—" }}</td>
-              <td>{{ edu.college_name|default:"—" }}</td>
-              <td>{{ edu.passed_year|default:"—" }}</td>
-              <td>{{ edu.grade_percent|default:"—" }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Level</th>
+                <th>Faculty</th>
+                <th>Course Name</th>
+                <th>University</th>
+                <th>College Name</th>
+                <th>Passed Year</th>
+                <th>Grade/CGPA</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for edu in edu_info %}
+              <tr>
+                <td>{{ edu.level|default:"—" }}</td>
+                <td>{{ edu.faculty|default:"—" }}</td>
+                <td>{{ edu.course_name|default:"—" }}</td>
+                <td>{{ edu.university_name|default:"—" }}</td>
+                <td>{{ edu.college_name|default:"—" }}</td>
+                <td>{{ edu.passed_year|default:"—" }}</td>
+                <td>{{ edu.grade_percent|default:"—" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         {% else %}
-        <div class="alert alert-warning">
-          No educational information available.
-        </div>
+          <div class="alert alert-warning">No educational information available.</div>
         {% endif %}
       </div>
     </div>
 
-    <!--Citizenship Documents-->
+    <!-- Citizenship Documents -->
     <div class="citizenship-doc">
       <h6 class="mb-3">Personal Documents</h6>
-      <div class="card" style="width: 18rem; height: 18rem">
-        <img
-          src="{{ per_info.ctz_file.url }}"
-          class="card-img-top"
-          alt="citizenship preview"
-        />
-        <a href="#" class="btn btn-primary"
-          ><i class="fa-solid fa-circle-down text-center"></i
-        ></a>
+      <div class="card" style="width: 18rem; height: 18rem;">
+        <img src="{{ per_info.ctz_file.url }}" class="card-img-top" alt="citizenship preview" />
+        <a href="#" class="btn btn-primary">
+          <i class="fa-solid fa-circle-down text-center"></i>
+        </a>
       </div>
     </div>
 
-    <!--Educational Documents-->
+    <!-- Educational Documents -->
     <div class="educational-doc py-5">
       <h6 class="mb-3">Educational Documents</h6>
       <div class="row">
         <div class="col">
-          <div class="card" style="width: 18rem; height: 18rem">
-            <img
-              src="{{ edu_info.upload_transcript1.url }}"
-              class="card-img-top"
-              alt="citizenship preview"
-            />
-            <a href="#" class="btn btn-primary"
-              ><i class="fa-solid fa-circle-down text-center"></i
-            ></a>
+          <div class="card" style="width: 18rem; height: 18rem;">
+            <img src="{{ edu_info.upload_transcript1.url }}" class="card-img-top" alt="citizenship preview" />
+            <a href="#" class="btn btn-primary">
+              <i class="fa-solid fa-circle-down text-center"></i>
+            </a>
           </div>
         </div>
-
         <div class="col"></div>
         <div class="col"></div>
       </div>
 
-      <!--Application Approval/Rejection Detail-->
+      <!-- Application Approval/Rejection Detail -->
       {% if applicant %}
-        <div class="applications-status">
-          <div class="application-status-title">Application Status</div>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Degree</th>
-                <th>Course</th>
-                <th>Application No.</th>
-                <th>Application Status</th>
-                <th>Application Date</th>
-                {% if applicant.application_status == 'approved' %}
-                  <th>Approved Date</th>
-                {% elif applicant.application_status == 'rejected' %}
-                  <th>Rejection Reason</th>
-                  <th>Rejection Date</th>
-                {% endif %}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{applicant.course.degree}}</td>
-                <td>{{applicant.course.course_name}}</td>
-                <td>{{applicant.application_no}}</td>
-                <td>{{applicant.application_status}}</td>
-                <td>{{applicant.submitted_at}}</td>
-                {% if applicant.application_status == 'approved' %}
-                  <td>{{applicant.approved_rejected_date}}</td>
-                {% elif applicant.application_status == 'rejected' %}
-                  <td>{{applicant.reason_to_reject}}</td>
-                  <td>{{applicant.approved_rejected_date}}</td>
-                {% endif %}
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="applications-status mt-4">
+        <div class="application-status-title">Application Status</div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Degree</th>
+              <th>Course</th>
+              <th>Application No.</th>
+              <th>Application Date</th>
+              <th>Application Status</th>
+              {% if applicant.application_status == 'approved' %}
+                <th>Approved Date</th>
+              {% endif %}
+              {% if applicant.application_status == 'rejected' %}
+                <th>Rejection Reason</th>
+                <th>Rejection Date</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ applicant.course.degree }}</td>
+              <td>{{ applicant.course.course_name }}</td>
+              <td>{{ applicant.application_no }}</td>
+              <td>{{ applicant.submitted_at }}</td>
+              {% if applicant.application_status == 'rejected' %}
+                <td class="text-danger">{{ applicant.application_status }}</td>
+              {% else %}
+                <td class="text-success">{{ applicant.application_status }}</td>
+              {% endif %}
+
+              {% if applicant.application_status == 'approved' %}
+                <td>{{ applicant.approved_rejected_date }}</td>
+              {% elif applicant.application_status == 'rejected' %}
+                <td>{{ applicant.reason_to_reject }}</td>
+                <td>{{ applicant.approved_rejected_date }}</td>
+              {% endif %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
       {% endif %}
 
-      <!-- Actions (optional) -->
+      <!-- Payment Details -->
+      <div class="payment-details-title mt-4">Payment Detail</div>
+      {% if payment_info %}
+      <div class="payment-details">
+        <table class="table table-bordered align-middle">
+          <thead>
+            <tr>
+              <th>Transaction id</th>
+              <th>Payment Status</th>
+              <th>Payment Channel</th>
+              <th>Payment Amount</th>
+              <th>Payment Date</th>
+              <th>Paid Course</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ payment_info.transaction_uuid }}</td>
+              <td>{{ payment_info.status }}</td>
+              <td>{{ payment_info.payment_method }}</td>
+              <td>{{ payment_info.amount_paid }}</td>
+              <td>{{ payment_info.payment_date }}</td>
+              <td>{{ payment_info.application.course.course_name|default:"—" }}</td>
+              <!-- Intentionally left cell content as-is to preserve logic -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="no-payment">
+        <p>No Payment has been done.</p>
+      </div>
+      {% endif %}
+
+      <!-- Actions -->
       <div class="d-flex gap-2 justify-content-center py-5">
-        <a
-          href="{% url 'course_application_list' %}"
-          class="btn btn-outline-secondary"
-          >← Back</a
-        >
-        <!--Approval Rejection form--> 
+        <a href="{% url 'course_application_list' %}" class="btn btn-outline-secondary">← Back</a>
+
         {% if applicant.application_status == 'pending' or applicant.application_status == 're-submit' %}
-          <form method="post" action="{% url 'approval_rejection' applicant.pk %}">
-              {% csrf_token %}
-              <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
-              <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>	
-          </form>
-		    {% endif %}
+        <form method="post" action="{% url 'approval_rejection' applicant.pk %}">
+          {% csrf_token %}
+          <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+          <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+        </form>
+        {% endif %}
       </div>
     </div>
   </div>
-  {% endblock %}
 </div>
+{% endblock %}

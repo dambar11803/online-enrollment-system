@@ -1,0 +1,203 @@
+/* =========================
+   Password Reset Confirm
+   File: css/reset_base/reset_confirm.css
+   ========================= */
+
+:root{
+  --bg: #f6f8fc;
+  --text: #0f172a;          /* slate-900 */
+  --muted: #475569;         /* slate-600 */
+  --card: #ffffff;
+  --border: #e2e8f0;        /* slate-200 */
+  --ring: #2563eb;          /* blue-600 */
+  --ring-soft: rgba(37,99,235,.16);
+  --shadow: 0 12px 30px rgba(2,6,23,.08);
+  --btn: #2563eb;
+  --btn-text: #ffffff;
+  --btn-hover: #1d4ed8;
+  --error: #dc2626;         /* red-600 */
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg: #0b1220;
+    --text: #e5e7eb;
+    --muted: #9aa4b2;
+    --card: #0f172a;
+    --border: #1f2937;
+    --ring: #60a5fa;
+    --ring-soft: rgba(96,165,250,.22);
+    --shadow: 0 12px 34px rgba(0,0,0,.45);
+    --btn: #3b82f6;
+    --btn-text: #0b1220;
+    --btn-hover: #2563eb;
+  }
+}
+
+/* Base */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+  background:
+    radial-gradient(1100px 1100px at 15% 0%, rgba(37,99,235,.06), transparent 60%) no-repeat,
+    radial-gradient(1100px 1100px at 85% 100%, rgba(99,102,241,.06), transparent 60%) no-repeat,
+    var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Layout */
+.password-reset-confirm{
+  min-height: 100svh;           /* mobile-safe viewport */
+  display: grid;
+  grid-template-rows: auto 1fr; /* header + content */
+}
+
+/* Sticky header */
+.reset-header{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: saturate(1.2) blur(6px);
+  -webkit-backdrop-filter: saturate(1.2) blur(6px);
+  background: color-mix(in oklab, var(--card), transparent 40%);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+/* Centering area */
+.password-confirm-card{
+  display: grid;
+  place-items: center;
+  padding: 28px 16px;
+}
+
+/* Card */
+.form-section{
+  width: 100%;
+  max-width: 520px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 26px;
+  animation: cardIn .28s ease-out;
+}
+
+@keyframes cardIn{
+  from{ opacity: 0; transform: translateY(6px) scale(.985); }
+  to  { opacity: 1; transform: translateY(0)  scale(1); }
+}
+
+/* Form layout */
+.form-section form{
+  display: grid;
+  gap: 14px;
+}
+.form-section form > div{
+  display: grid;
+  gap: 6px;
+}
+
+/* Labels */
+.form-section label{
+  font-size: .95rem;
+  color: var(--muted);
+}
+
+/* Inputs */
+.form-section input[type="password"],
+.form-section input[type="text"]{
+  width: 100%;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card), transparent 10%);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 12px 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+/* Focus ring */
+.form-section input:focus{
+  border-color: var(--ring);
+  box-shadow: 0 0 0 4px var(--ring-soft);
+}
+
+/* Placeholder + help text */
+.form-section ::placeholder{
+  color: color-mix(in oklab, var(--muted), transparent 35%);
+}
+.form-section .helptext{
+  font-size: .88rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Django errorlist */
+.form-section ul.errorlist{
+  margin: 4px 0 0;
+  padding: 8px 10px;
+  list-style: none;
+  border: 1px solid color-mix(in oklab, var(--error), black 12%);
+  background: color-mix(in oklab, var(--error), white 90%);
+  color: var(--error);
+  border-radius: 8px;
+  font-size: .9rem;
+}
+
+/* Submit button */
+.form-section button[type="submit"]{
+  margin-top: 6px;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: .2px;
+  cursor: pointer;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--btn), white 6%), var(--btn));
+  color: var(--btn-text);
+  box-shadow: 0 8px 18px rgba(37,99,235,.25);
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
+}
+.form-section button[type="submit"]:hover{ filter: brightness(1.03); }
+.form-section button[type="submit"]:active{ transform: translateY(1px); }
+.form-section button[type="submit"]:focus-visible{
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Messages (optional) */
+.messages, #flash-messages{
+  max-width: 520px;
+  margin: 10px auto 0;
+  padding: 0;
+  list-style: none;
+}
+.messages li{
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--card), transparent 8%);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .form-section{ animation: none; }
+  .form-section button[type="submit"]{ transition: none; }
+}
+
+/* Responsive tweaks */
+@media (min-width: 640px){
+  .form-section{ padding: 32px; border-radius: 18px; }
+  .reset-header{ padding: 16px 24px; }
+}

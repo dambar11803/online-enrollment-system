@@ -318,7 +318,7 @@ class CourseDetails(models.Model):
 
     degree = models.CharField(max_length=50, choices=DEGREE_CHOICES)
     course_name = models.CharField(max_length=10, unique=True)
-    course_full_name  = models.CharField(max_length=100, unique=True, blank=True)
+    course_full_name = models.CharField(max_length=100, unique=True, blank=True)
     course_code = models.CharField(max_length=10, unique=True)
     course_duration = models.CharField(max_length=10, choices=COURSE_DURATION)
     total_seats = models.PositiveIntegerField(default=40)
@@ -386,7 +386,8 @@ class Application(models.Model):
     )
     submitted_at = models.DateTimeField(auto_now_add=True)
     approved_rejected_date = models.DateTimeField(null=True, blank=True)
-    reason_to_reject = models.TextField(null=True, blank=True)
+    reason_to_reject = models.TextField(null=True, blank=True) 
+    is_paid = models.BooleanField(default=False)
 
     class Meta:
         constraints = [
@@ -399,3 +400,69 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.course.course_name}"
+
+#-------------------------------
+#Contactform Model 
+#-------------------------------
+class UserContact(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    email = models.EmailField()
+    phone = models.CharField(max_length=13)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.name}-message"
+    
+#----------------------------------------
+#E-Sewa Payment Model 
+#----------------------------------------
+
+class PaymentDetail(models.Model):
+    STATUS_CHOICES = [
+        ("INITIATED", "Initiated"),
+        ("SUCCESS", "Success"),
+        ("FAILED", "Failed"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="esewa_payments",
+    )
+    application = models.OneToOneField(
+        "admissionapp.Application",
+        on_delete=models.CASCADE,
+        related_name="payment",)
+
+    amount_paid = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0"))],)
+    
+    is_payment_completed = models.BooleanField(default=False)
+
+    # eSewa essentials
+    transaction_uuid = models.CharField(max_length=64, unique=True)
+    transaction_reference = models.CharField(max_length=64, null=True, blank=True)
+    product_code = models.CharField(max_length=64, blank=True)  # e.g. EPAYTEST (sandbox)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="INITIATED")
+    payment_method = models.CharField(
+        max_length=50,
+        choices=[("Khalti", "Khalti"), ("e-Sewa", "e-Sewa"), ("cash", "Cash")],
+        default="e-Sewa",
+    )
+    payment_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True) 
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["application"], name="unique_payment_per_application"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.transaction_uuid} • {self.status}"    
+    

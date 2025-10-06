@@ -1,73 +1,91 @@
 {% extends 'student/student_base.html' %}
-
 {% load static %}
-{% block title %}
-  Personal Information
-{% endblock %}
+
+{% block title %}Personal Information{% endblock %}
+
 {% block css %}
-  <link rel="stylesheet" href="{% static 'css/personal_info.css' %}" />
+<link rel="stylesheet" href="{% static 'css/student/application_list.css' %}" />
 {% endblock %}
 
 {% block body %}
- <div class="application-list-dashboard">
+<div class="application-list-dashboard">
+  {% if applications %}
     <div class="application-list-title">Application List</div>
-    {% for app in applications %}
-    
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>SN</th>
-                    <th>Application No</th>
-                    <th>Course</th>
-                    <th>Degree</th>
-                    <th>Duration</th>
-                    <th>Submitted at</th>
-                    <th>Status</th>
-                    {% if app.application_status == 'rejected' %}
-                        <th class="text-danger">Rejection Reason</th>
-                        <th class="text-danger">Rejection Date</th>
-                    {% elif app.application_status == 'approved' %}  
-                        <th class="text-success">Approval Date</th>  
-                    {% endif %}    
-                </tr>
-            </thead>
-            <thead>
-                
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td>{{app.application_no}}</td>
-                        <td>{{app.course.course_name}}</td>
-                        <td>{{app.course.degree}}</td>
-                        <td>{{app.course.course_duration}}</td>
-                        <td>{{app.submitted_at}}</td>
-                        <td>{{app.application_status}}</td>
-                        {% if app.application_status == 'rejected' %}
-                            <td>{{app.reason_to_reject}}</td>
-                            <td>{{app.approved_rejected_date}}</td>
-                        {% elif app.application_status == 'approved' %}  
-                            <td class="text-success">{{app.approved_rejected_date}}</td> 
-                        {% endif %}    
-                    </tr>
-            </thead>
-        </table>
+  {% endif %}
 
-         <!-Payment Button-->
-        {% if app.application_status == 'approved' %}
-            <a class="btn btn-primary" href="{% url 'khalti_initiate' app.pk %}">Pay with Khalti</a>
-            
-        {% endif %}
-
-        <!--Re-submit Button-->
+  {% for app in applications %}
+  <table class="table-bordered">
+    <thead class="bg-primary">
+      <tr>
+        <th>SN</th>
+        <th>Application No</th>
+        <th>Course</th>
+        <th>Degree</th>
+        <th>Duration</th>
+        <th>Submitted at</th>
+        <th>Status</th>
         {% if app.application_status == 'rejected' %}
-            <div class="re-submit-btn text-end">
-                <a href="{% url 're_submit_application' app.pk %}" class="btn btn-outline-primary">Re-submit</a>
-            </div>
+          <th class="text-danger">Rejection Reason</th>
+          <th class="text-danger">Rejection Date</th>
+        {% elif app.application_status == 'approved' %}
+          <th class="text-success">Approval Date</th>
         {% endif %}
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ app.application_no }}</td>
+        <td>{{ app.course.course_name }}</td>
+        <td>{{ app.course.degree }}</td>
+        <td>{{ app.course.course_duration }}</td>
+        <td>{{ app.submitted_at|date:"Y-m-d H:i" }}</td>
+        <td>{{ app.application_status|title }}</td>
+
+        {% if app.application_status == 'rejected' %}
+          <td>{{ app.reason_to_reject }}</td>
+          <td>{{ app.approved_rejected_date|date:"Y-m-d H:i" }}</td>
+        {% elif app.application_status == 'approved' %}
+          <td class="text-success">{{ app.approved_rejected_date|date:"Y-m-d H:i" }}</td>
+        {% endif %}
+      </tr>
+    </tbody>
+  </table>
+
+  {# -------- Payment Buttons (only when approved) -------- #}
+    <div class="text-center py-3">
+    {% if app.application_status != 'approved' and not app.is_paid %}
+      <div class="make-payment">Make Payment</div>
+      <div class="payment-methods">
+        <a href="{% url 'esewa_initiate' app.pk %}" class="btn btn-success">
+          Pay with eSewa
+        </a>
+        <a href="{% url 'khalti_initiate' app.pk %}" class="btn btn-outline-primary ms-2">
+          Pay with Khalti
+        </a>
+      </div>
+    {% else %}
+      <button class="btn btn-secondary" disabled>
+        {% if app.is_paid %}Payment Completed{% else %}Payment Disabled{% endif %}
+      </button>
+  {% endif %}
+</div>
 
 
-     {% empty %}
-        <div class="no-application-list text-center">No Any Course has been Applied.</div>
+  {# -------- Re-submit Button (when rejected) -------- #}
+  {% if app.application_status == 'rejected' %}
+    <div class="text-end py-3">
+      <a href="{% url 're_submit_application' app.pk %}" class="btn btn-outline-danger">
+        Re-submit Application
+      </a>
+    </div>
+  {% endif %}
 
-     {% endfor %}
- </div>
+  {% empty %}
+    <div class="no-application-list text-center py-4">
+      No course has been applied yet.
+    </div>
+  {% endfor %}
+</div>
 {% endblock %}

@@ -5,7 +5,7 @@
   course_detail
 {% endblock %}
 {% block css %}
-  <link rel="stylesheet" href="" />
+  <link rel="stylesheet" href="{% static 'css/student/select_course.css' %}" />
 {% endblock %}
 
 {% block body %}
@@ -15,7 +15,7 @@
       <a href="{% url 'student_dashboard' %}" class="btn btn-outline-primary my-3">Back</a>
     </div>
     <div class="course">
-      <table class="table"> 
+      <table class="table-bordered"> 
             <tr>
                 <th>Degree</th><td>{{ course_info.degree }}</td>
             </tr>
@@ -50,14 +50,15 @@
 
         </table>
 
-        {% if has_personal_info and has_edu_info and course_info.seats_filled < course_info.total_seats %}
+        {% if application_exists %}  
+          <div class="apply-btn text-center">
+            <button class="btn btn-outline-secondary px-5" disabled>You already applied</button>
+          </div>
+        {% elif has_personal_info and has_edu_info and course_info.seats_filled < course_info.total_seats %}
           <div class="apply-btn text-center px-5">
             <a href="{% url 'apply_course' pk=course_info.pk %}" class="btn btn-outline-primary">Apply</a>
           </div>
-        {% else %}  
-         <div class="apply-btn text-center">
-          <button class="btn btn-outline-secondary px-5" disabled> Apply</button>
-         </div>
+        
         {% endif %}
     </div>
   </div>

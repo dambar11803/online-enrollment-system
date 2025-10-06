@@ -1,0 +1,70 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+{% block title %}Pay with eSewa{% endblock %}
+{% block css %} <link rel="stylesheet" href="{% static 'css/student/esewa.css' %}"> {% endblock css %}
+
+{% block body %}
+<div class="container">
+</head>
+<body>
+    <div class="payment-container">
+        <div class="logo-container">
+            <svg class="esewa-logo" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <rect width="200" height="60" fill="#60a917" rx="8"/>
+                <text x="100" y="38" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white" text-anchor="middle">eSewa</text>
+            </svg>
+        </div>
+        
+        <h1>Complete Your Payment</h1>
+        <p class="subtitle">Secure payment gateway</p>
+        
+        <div class="payment-details">
+            <div class="detail-row">
+                <span class="detail-label">Application ID:</span>
+                <span class="detail-value">{{ application.id }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Course:</span>
+                <span class="detail-value">{{ application.course.course_name }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Transaction ID:</span>
+                <span class="detail-value">{{ transaction_uuid|slice:":16" }}...</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Amount to Pay:</span>
+                <span class="detail-value">NPR {{ total_amount }}</span>
+            </div>
+        </div>
+        
+        <form action="{{ esewa_form_url }}" method="POST" class="payment-form">
+            <!-- Required fields for eSewa -->
+            <input type="hidden" name="amount" value="{{ amount }}" />
+            <input type="hidden" name="tax_amount" value="{{ tax_amount }}" />
+            <input type="hidden" name="total_amount" value="{{ total_amount }}" />
+            <input type="hidden" name="transaction_uuid" value="{{ transaction_uuid }}" />
+            <input type="hidden" name="product_code" value="{{ product_code }}" />
+            <input type="hidden" name="product_service_charge" value="{{ product_service_charge }}" />
+            <input type="hidden" name="product_delivery_charge" value="{{ product_delivery_charge }}" />
+            <input type="hidden" name="success_url" value="{{ success_url }}" />
+            <input type="hidden" name="failure_url" value="{{ failure_url }}" />
+            <input type="hidden" name="signed_field_names" value="{{ signed_field_names }}" />
+            <input type="hidden" name="signature" value="{{ signature }}" />
+            
+            <button type="submit" class="pay-button">
+                Proceed to eSewa
+            </button>
+        </form>
+        
+        <div class="secure-badge">
+            <span class="lock-icon">🔒</span>
+            <span>Secured by eSewa Payment Gateway</span>
+        </div>
+        
+        <a href="{% url 'student_dashboard' %}" class="cancel-link">Cancel Payment</a>
+    </div>
+
+
+
+</div>
+{% endblock %}

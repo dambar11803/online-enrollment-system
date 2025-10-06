@@ -1,0 +1,466 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated background elements */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 219, 226, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.2) 0%, transparent 50%);
+  animation: backgroundFloat 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpolygon points='50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40'/%3E%3C/g%3E%3C/svg%3E") repeat;
+  animation: sparkle 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes backgroundFloat {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+  33% { 
+    transform: translateY(-20px) rotate(1deg);
+    filter: hue-rotate(30deg);
+  }
+  66% { 
+    transform: translateY(20px) rotate(-1deg);
+    filter: hue-rotate(-30deg);
+  }
+}
+
+@keyframes sparkle {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-100vh) rotate(360deg); }
+}
+
+/* Main Container */
+.password-reset-done {
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+  animation: zoomIn 1s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Card */
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  padding: 50px 40px;
+  text-align: center;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card shimmer effect */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: cardShimmer 4s infinite;
+  z-index: 1;
+}
+
+@keyframes cardShimmer {
+  0% { left: -100%; }
+  50% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Icon */
+.icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: iconBounce 2s ease-in-out infinite;
+  box-shadow: 
+    0 10px 30px rgba(79, 172, 254, 0.3),
+    0 0 0 4px rgba(255, 255, 255, 0.8);
+}
+
+/* Email icon using CSS */
+.icon::before {
+  content: '';
+  width: 36px;
+  height: 24px;
+  background: white;
+  border-radius: 4px;
+  position: relative;
+  z-index: 2;
+}
+
+.icon::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-top: 12px solid white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  z-index: 3;
+}
+
+@keyframes iconBounce {
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+    box-shadow: 
+      0 10px 30px rgba(79, 172, 254, 0.3),
+      0 0 0 4px rgba(255, 255, 255, 0.8);
+  }
+  50% { 
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 
+      0 20px 40px rgba(79, 172, 254, 0.4),
+      0 0 0 6px rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Floating particles around icon */
+.icon::before {
+  animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(79, 172, 254, 0.7);
+  }
+  50% { 
+    box-shadow: 0 0 0 20px rgba(79, 172, 254, 0);
+  }
+}
+
+/* Heading */
+.card h2 {
+  color: #2d3748;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textGlow 2s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes textGlow {
+  0% { 
+    filter: drop-shadow(0 0 5px rgba(79, 172, 254, 0.5));
+  }
+  100% { 
+    filter: drop-shadow(0 0 15px rgba(79, 172, 254, 0.8));
+  }
+}
+
+/* Paragraph */
+.card p {
+  color: #4a5568;
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 500;
+  animation: fadeInUp 1.2s ease-out 0.5s both;
+  position: relative;
+  z-index: 2;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Success checkmark animation overlay */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: successRipple 2s ease-out 1s;
+  z-index: 0;
+}
+
+@keyframes successRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Floating action hint */
+.card {
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .icon {
+  transform: scale(1.1);
+  animation-duration: 1s;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .password-reset-done {
+    max-width: 100%;
+    padding: 16px;
+  }
+  
+  .card {
+    padding: 40px 32px;
+    border-radius: 20px;
+  }
+  
+  .icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 28px;
+  }
+  
+  .icon::before {
+    width: 32px;
+    height: 20px;
+  }
+  
+  .icon::after {
+    border-left-width: 16px;
+    border-right-width: 16px;
+    border-top-width: 10px;
+  }
+  
+  .card h2 {
+    font-size: 28px;
+  }
+  
+  .card p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 32px 24px;
+  }
+  
+  .icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 24px;
+  }
+  
+  .icon::before {
+    width: 28px;
+    height: 18px;
+  }
+  
+  .icon::after {
+    border-left-width: 14px;
+    border-right-width: 14px;
+    border-top-width: 9px;
+  }
+  
+  .card h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  
+  .card p {
+    font-size: 15px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  }
+  
+  .card {
+    background: rgba(26, 32, 44, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .card h2 {
+    color: #f7fafc;
+  }
+  
+  .card p {
+    color: #a0aec0;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .card {
+    background: #fff;
+    border: 3px solid #000;
+  }
+  
+  .card h2 {
+    color: #000;
+    -webkit-text-fill-color: #000;
+  }
+  
+  .card p {
+    color: #000;
+  }
+  
+  .icon {
+    background: #000;
+    border: 3px solid #000;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .card:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+  }
+  
+  body::before,
+  body::after,
+  .card::before,
+  .card::after {
+    display: none;
+  }
+  
+  .card {
+    background: white;
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+  
+  .card h2,
+  .card p {
+    color: #000;
+    -webkit-text-fill-color: #000;
+  }
+  
+  .icon {
+    background: #000;
+  }
+}
+
+/* Focus management for accessibility */
+.card:focus {
+  outline: 3px solid #4facfe;
+  outline-offset: 2px;
+}
+
+/* Loading state (optional enhancement) */
+.loading .icon {
+  animation: loadingSpin 1s linear infinite;
+}
+
+@keyframes loadingSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Success confirmation state */
+.success-confirmed .card {
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}

@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path 
+from django.contrib.auth import views as auth_views  
 from . import views
 from .views import (
     AddCourseView,
@@ -23,7 +24,6 @@ urlpatterns = [
     path("course/detail/<int:pk>/", CourseDetailView.as_view(), name="course_detail"),
     path("personal-info/", views.PersonalInfo_view, name="personal_info"),
     path("educational-info/", views.EducationalInfo_view, name="educational_info"),
-    path("admission/", views.admission, name="admission"),
     path("user-profile/", views.profile, name="profile"),
     path(
         "personalinfo-detail/<int:pk>/",
@@ -103,4 +103,50 @@ urlpatterns = [
     ),
     path("pay/khalti/return/", views.khalti_return, name="khalti_return"),
     path("pay/khalti/verify/", views.khalti_verify, name="khalti_verify"),
+    path('contact/', views.contact, name='contact'),
+     
+    # Password change URLs
+    path('password_change/', 
+         auth_views.PasswordChangeView.as_view(template_name='password_change/password_change_form.html'), 
+         name='password_change'),
+    path('password_change/done/', 
+         auth_views.PasswordChangeDoneView.as_view(template_name='password_change/password_change_done.html'), 
+         name='password_change_done'),
+    
+    #password reset
+    path(
+        "password-reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="password_reset/password_reset_form.html",
+            email_template_name="password_reset/password_reset_email.html",
+            subject_template_name="password_reset/password_reset_subject.txt",
+            success_url="/password-reset/done/",
+        ),
+        name="password_reset",
+    ),
+    path(
+        "password-reset/done/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="password_reset/password_reset_done.html"
+        ),
+        name="password_reset_done",
+    ),
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="password_reset/password_reset_confirm.html",
+            success_url="/reset/complete/",
+        ),
+        name="password_reset_confirm",
+    ),
+    path(
+        "reset/complete/",
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="password_reset/password_reset_complete.html"
+        ),
+        name="password_reset_complete",
+    ),
+    
+   
+    
 ]

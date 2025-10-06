@@ -1,0 +1,24 @@
+{% extends 'student/student_base.html' %}
+
+{% load static %}
+{% block title %}
+  Personal Information
+{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/student/contact.css' %}" />
+{% endblock %}
+
+{% block body %}
+    <div class="contact-section container">
+        <div class="contact-form">
+            <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,8 +1,10 @@
 from math import ceil
-import uuid
+import uuid, json, base64, requests
 import requests  # type: ignore
-from io import BytesIO
-
+from io import BytesIO 
+from decimal import Decimal 
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings  # type: ignore
 from django.contrib import messages  # type: ignore
 from django.contrib.auth import login, logout, get_user_model
@@ -20,6 +22,7 @@ from django.http import (
     JsonResponse,
     HttpResponseBadRequest,
 )
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
@@ -54,14 +57,25 @@ from .forms import (
     PersonalInfoForm,
     EducationalInfoForm,
     RejectReasonForm,
+    UserContactForm,
+    PaymentDetailForm,
 )
 from .models import (
     CourseDetails,
     PersonalInfo,
     EducationalInfo,
     Application,
+    PaymentDetail,
 )
-from .tokens import account_activation_token
+
+#impors for custom passwordchange 
+from django.contrib.auth.views import PasswordChangeView
+from .tokens import account_activation_token  
+
+#For E-Sewa payment
+from .models import PaymentDetail
+from .utils import esewa_signature
+
 
 
 User = get_user_model()
@@ -495,17 +509,6 @@ def EducationalInfo_view(request):
 
 
 # -----------------------------
-# Admission (guarded by decorator)
-# -----------------------------
-from .decorators import profile_complete_required  # noqa: E402
-
-
-@profile_complete_required
-def admission(request):
-    return render(request, "student/admission.html")
-
-
-# -----------------------------
 # Profile
 # -----------------------------
 @login_required
@@ -673,9 +676,14 @@ def course_application_list(request):
     personal_info = PersonalInfo.objects.filter(
         user=request.user
     ).exists()
+    
     edu_info = EducationalInfo.objects.filter(
         user=request.user
     ).exists()
+     
+    payment_info = PaymentDetail.objects.filter(
+        user=request.user).exists()
+     
     applicants = Application.objects.select_related(
         "user",
         "course"
@@ -685,6 +693,7 @@ def course_application_list(request):
         "per_info": personal_info,
         "edu_info": edu_info,
         "applicants": applicants,
+        'payment_info':payment_info,
     }
     return render(
         request,
@@ -698,20 +707,25 @@ def course_application_list(request):
 # ---------------------------------------------
 def course_applicant_detail(request, pk):
     # Get the applicants instance
-    applicant = get_object_or_404(Application, pk=pk)
+    applicant = get_object_or_404(Application, pk=pk) 
+    
 
     # Get applicant related personal info and educational info
     personal_info = PersonalInfo.objects.filter(
         user=applicant.user
     ).first()
+    
     edu_info = EducationalInfo.objects.filter(
         user=applicant.user
     )
+    
+    payment_info = PaymentDetail.objects.filter(application=applicant).select_related('application__course').order_by('-payment_date').first()
 
     context = {
         "per_info": personal_info,
         "edu_info": edu_info,
         "applicant": applicant,
+        "payment_info": payment_info,
     }
     return render(
         request,
@@ -724,8 +738,13 @@ def course_applicant_detail(request, pk):
 # Select Course by Student
 # -----------------------------
 def select_course(request, pk):
-    course_info = get_object_or_404(CourseDetails, pk=pk)
-
+    course_info = get_object_or_404(CourseDetails, pk=pk) 
+    
+    #check if pending application exist 
+    application_exists = Application.objects.filter(
+        user=request.user, application_status='pending'
+    ).exists()
+    
     has_personal_info = PersonalInfo.objects.filter(
         user=request.user
     ).exists()
@@ -737,6 +756,7 @@ def select_course(request, pk):
         "course_info": course_info,
         "has_personal_info": has_personal_info,
         "has_edu_info": has_edu_info,
+        "application_exists": application_exists,
     }
     return render(request, "student/select_course.html", context)
 
@@ -1536,4 +1556,34 @@ def khalti_verify(request):
         headers=headers,
         timeout=20
     )
-    return JsonResponse(r.json(), status=r.status_code)
+    return JsonResponse(r.json(), status=r.status_code) 
+
+#----------------------------------------------
+#Contact Form 
+#----------------------------------------------
+def contact(request):
+    if request.method == 'POST':
+        form = UserContactForm(request.POST) 
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Thanks! Your message has been sent.")
+            return redirect('contact')
+    else:
+        form = UserContactForm()
+    return render(request, 'student/contact_form.html', {'form':form}) 
+
+
+#Custom PasswordChange url redirect
+class CustomPasswordChangeView(PasswordChangeView):
+    success_url = reverse_lazy('student_dashboard') 
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Your password has been changed successfully.")
+        return super().form_valid(form) 
+    
+#---------------------------------------
+#Admin: Payment Check and Approval. 
+#--------------------------------------- 
+
+
+

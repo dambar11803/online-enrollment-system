@@ -8,7 +8,7 @@
     <div class="add-course-container container">
         <div class="add-course-title">Add New Course</div>
         <div class="add-course-form">
-            <form method="POST">
+            <form method="POST"enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form.as_p}}
                 <input type="submit" value="Add" class="btn btn-success">

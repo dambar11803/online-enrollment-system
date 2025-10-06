@@ -49,6 +49,10 @@
               <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'admission' %}active{% endif %}" href="{% url 'application_list' %}"><i class="fa-solid fa-list"></i> <span>Application</span></a>
             </li>
 
+            <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact'%}"><i class="fa-solid fa-envelope"></i> <span>Contact</span></a>
+            </li>
+
             <li class="nav-item d-flex align-items-center ms-2">
               {% if request.user.is_authenticated and request.user.personal_info.profile_pic %}
                 <a href="{% url 'profile' %}"><img src="{{ request.user.personal_info.profile_pic.url }}" alt="profile-pic" class="rounded-circle profile-img" /></a>
@@ -103,13 +107,13 @@
                   <a href="{% url 'student_dashboard' %}" class="text-light">Dashboard</a>
                 </li>
                 <li>
-                  <a href="" class="text-light">Add Debtor</a>
+                  <a href="{% url 'personal_info' %}" class="text-light">Personal Info</a>
                 </li>
                 <li>
-                  <a href="" class="text-light">Debtor List</a>
+                  <a href="{% url 'education_list' %}" class="text-light">Education Info</a>
                 </li>
                 <li>
-                  <a href="" class="text-light">Transactions</a>
+                  <a href="{% url 'application_list' %}" class="text-light">Applications</a>
                 </li>
               </ul>
             </div>
@@ -147,7 +151,7 @@
                 </li>
                 <li>
                   <i class="fa-solid fa-envelope me-2"></i>
-                  <a href="mailto:raidamb2@gmail.com" class="text-light text-decoration-none">raidamb2@gmail.com</a>
+                  <a href="mailto:raidamb2@gmail.com" class="text-light text-decoration-none">raidambr1 2@gmail.com</a>
                 </li>
                 <li>
                   <i class="fa-solid fa-globe me-2"></i>
@@ -162,7 +166,7 @@
         <div class="row align-items-center">
           <div class="col">
             <div class="col-12 footer-bottom text-center text-md-start">
-              <small>© 2025 Personal Debt Manager | All Rights Reserved | Dambar Chamling.</small>
+              <small>© 2025 Online Enrollment System | All Rights Reserved | Dambar Chamling.</small>
             </div>
           </div>
           <div class="col-6 col-md-4">

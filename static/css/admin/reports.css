@@ -1,0 +1,171 @@
+/* =========================================
+   Reports (Admin)
+   File: static/css/admin/reports.css
+   ========================================= */
+
+/* ---- Theme tokens (works with admin_base.css, but safe alone) ---- */
+:root{
+  --bg:#f7f8fb;
+  --surface:#ffffff;
+  --text:#1d2433;
+  --muted:#667085;
+  --border:#e6e9ef;
+  --accent:#4f46e5;     /* indigo-600 */
+  --success:#22c55e;    /* green-500 */
+  --danger:#ef4444;     /* red-500 */
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 12px 34px rgba(0,0,0,.12);
+  --radius:14px;
+  --container-px: clamp(16px, 2.5vw, 32px);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0f16; --surface:#101623; --text:#e7ecf3;
+    --muted:#a9b2c0; --border:#1f2636;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.6);
+    --shadow-md:0 14px 36px rgba(0,0,0,.5);
+  }
+}
+
+/* ---- Page shell ---- */
+.reprts-section, .reports-section{ /* (covers the typo & the correct class) */
+  padding-left: var(--container-px);
+  padding-right: var(--container-px);
+}
+
+.reports-title{
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: var(--text);
+}
+
+/* ---- Table wrapper ---- */
+.reprts-section .table,
+.reports-section .table{
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;                 /* keep rounded corners */
+  box-shadow: var(--shadow-sm);
+  border-collapse: separate;        /* needed for radius */
+  border-spacing: 0;
+}
+
+/* First row acts like a header in your markup */
+.reprts-section .table tr:first-child td,
+.reports-section .table tr:first-child td{
+  background: color-mix(in oklab, var(--accent) 10%, var(--surface));
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Cells */
+.reprts-section .table th,
+.reports-section .table th,
+.reprts-section .table td,
+.reports-section .table td{
+  padding: 12px 14px;
+  vertical-align: middle;
+  border-right: 1px solid var(--border);
+}
+.reprts-section .table tr > *:last-child,
+.reports-section .table tr > *:last-child{
+  border-right: none;
+}
+
+/* Row hover */
+.reprts-section .table tbody tr:hover,
+.reports-section .table tbody tr:hover{
+  background: color-mix(in oklab, var(--accent) 6%, transparent);
+}
+
+/* Align action columns (2 & 3) center */
+.reprts-section .table tr > td:nth-child(2),
+.reprts-section .table tr > td:nth-child(3),
+.reports-section .table tr > td:nth-child(2),
+.reports-section .table tr > td:nth-child(3){
+  text-align: center;
+  width: 120px;
+}
+
+/* ---- Icon buttons ---- */
+.reprts-section .table a,
+.reports-section .table a{
+  display: inline-grid;
+  place-items: center;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--accent) 7%, transparent);
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+  box-shadow: var(--shadow-sm);
+}
+.reprts-section .table a:hover,
+.reports-section .table a:hover{
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+
+/* Specific colors for eye/download icons */
+.reprts-section .fa-eye, .reports-section .fa-eye{
+  color: var(--accent);
+}
+.reprts-section .fa-file-arrow-down, .reports-section .fa-file-arrow-down{
+  color: var(--success);
+}
+
+/* Make the first (Particular) column breathe */
+.reprts-section .table th:first-child,
+.reprts-section .table td:first-child,
+.reports-section .table th:first-child,
+.reports-section .table td:first-child{
+  font-weight: 700;
+  color: var(--text);
+  min-width: 220px;
+}
+
+/* ---- Accessibility ---- */
+:where(.reprts-section a, .reports-section a):focus-visible{
+  outline: 3px solid color-mix(in oklab, var(--accent) 55%, transparent);
+  outline-offset: 2px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 992px){
+  .reprts-section .table,
+  .reports-section .table{
+    display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    box-shadow: var(--shadow-md);
+  }
+}
+@media (max-width: 576px){
+  .reports-title{ font-size: 1.05rem; }
+  .reprts-section .table th,
+  .reprts-section .table td,
+  .reports-section .table th,
+  .reports-section .table td{
+    padding: 10px 12px;
+  }
+  .reprts-section .table a,
+  .reports-section .table a{
+    width: 32px; height: 32px; border-radius: 8px;
+  }
+}
+
+/* ---- Print-friendly ---- */
+@media print{
+  :root{ --surface:#fff; --text:#000; --border:#000; }
+  .reprts-section .table,
+  .reports-section .table{
+    box-shadow: none; border-color:#000;
+  }
+  .reprts-section .table tr:first-child td,
+  .reports-section .table tr:first-child td{
+    background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+}

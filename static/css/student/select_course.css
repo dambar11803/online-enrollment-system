@@ -1,0 +1,212 @@
+ /* File: static/css/student/select_course.css */
+/* Scoped styles for course detail page */
+
+:root {
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --primary: #0d6efd; /* Bootstrap primary */
+  --success: #198754;
+  --danger: #dc3545;
+  --ring: rgba(13, 110, 253, 0.15);
+  --radius: 16px;
+  --shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+}
+
+.course-select-container {
+  color: var(--text);
+  padding-bottom: 2rem;
+}
+
+.course-select-title {
+  font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--text);
+  display: inline-block;
+  padding: .6rem 1rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(13,110,253,.12), rgba(13,110,253,.04));
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.course-select-container .back-btn .btn {
+  border-radius: 999px;
+  padding: .45rem 1rem;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.course-select-container .back-btn .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(13,110,253,.2);
+}
+
+.course {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1px solid #eef2f7;
+}
+
+/* Table base */
+.course table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.975rem;
+}
+
+/* Each row has a label (th) and a value (td) */
+.course table tr {
+  transition: background-color .15s ease;
+}
+.course table tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Header cells (labels) */
+.course table th {
+  width: 32%;
+  text-align: left;
+  padding: 14px 16px;
+  font-weight: 600;
+  color: #0f172a;
+  background:
+    linear-gradient(90deg, rgba(13,110,253,0.08), rgba(13,110,253,0.00));
+  border-bottom: 1px solid #eef2f7;
+  border-right: 1px solid #eef2f7;
+  position: relative;
+}
+
+/* Accent bar on the left of label */
+.course table th::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #0d6efd, #60a5fa);
+  opacity: .65;
+}
+
+/* Value cells */
+.course table td {
+  padding: 14px 16px;
+  color: var(--text);
+  border-bottom: 1px solid #eef2f7;
+  word-break: break-word;
+}
+
+/* Zebra striping (affects td + th together) */
+.course table tr:nth-child(even) th,
+.course table tr:nth-child(even) td {
+  background-color: #fbfdff;
+}
+
+/* First and last row rounding (visual nicety) */
+.course table tr:first-child th {
+  border-top-left-radius: calc(var(--radius) - 1px);
+}
+.course table tr:first-child td {
+  border-top-right-radius: calc(var(--radius) - 1px);
+}
+.course table tr:last-child th,
+.course table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Apply section */
+.apply-btn {
+  padding: 1.25rem 1rem 1.75rem;
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  border-top: 1px solid #eef2f7;
+}
+
+.apply-btn .btn {
+  min-width: 220px;
+  border-radius: 999px;
+  padding: .65rem 1.5rem;
+  font-weight: 600;
+  letter-spacing: .3px;
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, color .18s ease;
+  box-shadow: 0 8px 20px rgba(13,110,253,.12);
+}
+.apply-btn .btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(13,110,253,.18);
+}
+.apply-btn .btn:disabled {
+  cursor: not-allowed;
+  opacity: .8;
+  box-shadow: none;
+}
+
+/* Utility for long text fields (description, requirements) */
+.course table td p {
+  margin-bottom: .5rem;
+  line-height: 1.6;
+  color: #334155;
+}
+.course table td p:last-child { margin-bottom: 0; }
+
+/* Responsive: stack label/value vertically on small screens */
+@media (max-width: 768px) {
+  .course {
+    border-radius: 14px;
+  }
+  .course table,
+  .course table tbody,
+  .course table tr,
+  .course table th,
+  .course table td {
+    display: block;
+    width: 100%;
+  }
+
+  .course table tr {
+    padding: 8px 0;
+    border-bottom: 1px solid #eef2f7;
+  }
+
+  .course table th {
+    border-right: none;
+    border-bottom: none;
+    background: transparent;
+    padding: 12px 16px 4px;
+    font-size: .9rem;
+    color: var(--muted);
+  }
+  .course table th::before {
+    display: none;
+  }
+
+  .course table td {
+    padding: 4px 16px 12px;
+    font-size: 1rem;
+    border-bottom: none;
+  }
+
+  .apply-btn {
+    padding: 1rem;
+  }
+  .apply-btn .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Focus ring for keyboard users (e.g., Back/Apply buttons) */
+.course-select-container a.btn:focus,
+.course-select-container .apply-btn .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .course-select-container .back-btn .btn,
+  .apply-btn .btn,
+  .course table tr {
+    transition: none !important;
+  }
+}

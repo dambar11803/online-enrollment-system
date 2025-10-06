@@ -4,18 +4,18 @@
   educationalinfo
 {% endblock %}
 {% block css %}
-  <link rel="stylesheet" href="{% static 'css/educationalinfo_detail' %}" />
+  <link rel="stylesheet" href="{% static 'css/student/educationalinfo_detail.css' %}" />
 {% endblock %}
 
 {% block body %}
   <div class="educationalinfo-detail-container container">
-    <div class="educationalinfo-text">Applicant Educational Detail</div>
+    <div class="educationalinfo-text text-primary">Educational Detail</div>
     <div class="back-btn text-end py-3"><a href="{% url 'education_list' %}" class="btn btn-primary">Education List</a></div>
 
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th>Level</th>
+          <th class="text-center">Level</th>
           <td class="text-center">{{ edu.level }}</td>
         </tr>
         <tr>

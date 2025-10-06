@@ -1,0 +1,314 @@
+/* Contact Section Container */
+.contact-section {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  
+}
+
+/* Contact Form Card */
+.contact-form {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.6s ease-out;
+}
+
+/* Form Title */
+.contact-form h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.contact-form h2 i {
+  color: #667eea;
+  font-size: 1.75rem;
+}
+
+/* Form Styling */
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Paragraph (Form Field) Container */
+.contact-form form p {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Form Labels */
+.contact-form form label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Form Inputs and Textareas */
+.contact-form form input[type="text"],
+.contact-form form input[type="email"],
+.contact-form form input[type="tel"],
+.contact-form form input[type="number"],
+.contact-form form textarea,
+.contact-form form select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #495057;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.contact-form form input:focus,
+.contact-form form textarea:focus,
+.contact-form form select:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Textarea Specific */
+.contact-form form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Select Dropdown */
+.contact-form form select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23495057' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+/* Error Messages */
+.contact-form form .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0 0;
+}
+
+.contact-form form .errorlist li {
+  color: #dc3545;
+  font-size: 0.875rem;
+  padding: 0.25rem 0;
+}
+
+/* Help Text */
+.contact-form form .helptext {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+/* Required Field Indicator */
+.contact-form form label::after {
+  content: " *";
+  color: #dc3545;
+}
+
+/* Submit Button */
+.contact-form .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.contact-form .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.contact-form .btn-primary:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.contact-form .btn-primary i {
+  font-size: 1rem;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating Label Effect (Optional Enhancement) */
+.contact-form form input:focus + label,
+.contact-form form textarea:focus + label,
+.contact-form form select:focus + label {
+  color: #667eea;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 2rem 1rem;
+    min-height: auto;
+  }
+
+  .contact-form {
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
+  }
+
+  .contact-form h2 {
+    font-size: 1.75rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .contact-form h2 i {
+    font-size: 1.5rem;
+  }
+
+  .contact-form form input[type="text"],
+  .contact-form form input[type="email"],
+  .contact-form form input[type="tel"],
+  .contact-form form input[type="number"],
+  .contact-form form textarea,
+  .contact-form form select {
+    font-size: 0.95rem;
+    padding: 0.75rem 0.875rem;
+  }
+
+  .contact-form .btn-primary {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .contact-section {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .contact-form {
+    padding: 1.5rem 1rem;
+  }
+
+  .contact-form h2 {
+    font-size: 1.5rem;
+  }
+
+  .contact-form form {
+    gap: 1.25rem;
+  }
+
+  .contact-form form input[type="text"],
+  .contact-form form input[type="email"],
+  .contact-form form input[type="tel"],
+  .contact-form form input[type="number"],
+  .contact-form form textarea,
+  .contact-form form select {
+    font-size: 0.9rem;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .contact-form .btn-primary {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Success/Info Messages */
+.contact-form .alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.contact-form .alert-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.contact-form .alert-danger {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.contact-form .alert-info {
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+}
+
+/* Checkbox and Radio Styling (if applicable) */
+.contact-form form input[type="checkbox"],
+.contact-form form input[type="radio"] {
+  width: auto;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+/* File Input Styling */
+.contact-form form input[type="file"] {
+  padding: 0.5rem;
+  background: white;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.contact-form form input[type="file"]:hover {
+  border-color: #667eea;
+  background: #f8f9fa;
+}
+
+/* Loading State for Submit Button */
+.contact-form .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-form .btn-primary:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}

@@ -5,6 +5,8 @@ from .models import (
     PersonalInfo,
     EducationalInfo,
     Application,
+    UserContact,
+    PaymentDetail,
 )
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
@@ -159,9 +161,6 @@ class CourseDetailsForm(forms.ModelForm):
             "course_code": forms.TextInput(attrs={"class": "form-control"}),
             "course_duration": forms.Select(attrs={"class": "form-select"}),
             "total_seats": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
-            "seats_filled": forms.NumberInput(
-                attrs={"class": "form-control", "min": 0}
-            ),
             "course_fee": forms.NumberInput(
                 attrs={"class": "form-control", "step": "0.01", "min": 0}
             ),
@@ -206,3 +205,28 @@ class RejectReasonForm(forms.ModelForm):
                 }
             ),
         }
+
+#---------------------------------
+#UserContactForm
+#---------------------------------- 
+class UserContactForm(forms.ModelForm): 
+    class Meta: 
+        model = UserContact 
+        fields = ['name','email','phone','message'] 
+        widgets = {
+            'name': forms.TextInput(attrs={'class':'form-control','placeholder':'Your name'}),
+            'email': forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Your Email'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Phone'}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your Message', 'rows': 4}),
+        } 
+        
+#PaymentDetail 
+
+class PaymentDetailForm(forms.ModelForm): 
+    class Meta: 
+        model = PaymentDetail 
+        fields = ['amount_paid','payment_method']
+        
+    
+
+        

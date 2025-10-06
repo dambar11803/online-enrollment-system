@@ -5,6 +5,8 @@ from .models import (
     PersonalInfo,
     EducationalInfo,
     Application,
+    UserContact,
+    PaymentDetail,
 )
 
 # Register your models here.
@@ -65,5 +67,26 @@ class ApplicationFormAdmin(admin.ModelAdmin):
     list_display = ("application_no", "application_status")
 
 
-admin.site.register(Application, ApplicationFormAdmin)
+admin.site.register(Application, ApplicationFormAdmin) 
 
+# -------------------------
+# Application
+# --------------------------
+
+
+class UserContactFormAdmin(admin.ModelAdmin):
+    list_display = ("name","email","phone")
+
+admin.site.register(UserContact, UserContactFormAdmin) 
+
+
+#PaymentDetail 
+@admin.register(PaymentDetail)
+class PaymentDetailAdmin(admin.ModelAdmin):
+    list_display = [
+        'amount_paid',
+        'payment_method',
+        'status',
+        'is_payment_completed',
+        'payment_date',
+    ] 
