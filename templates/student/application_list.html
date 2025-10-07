@@ -10,7 +10,7 @@
 {% block body %}
 <div class="application-list-dashboard">
   {% if applications %}
-    <div class="application-list-title">Application List</div>
+    <div class="application-list-title text-start">My Application</div>
   {% endif %}
 
   {% for app in applications %}
@@ -53,24 +53,49 @@
     </tbody>
   </table>
 
-  {# -------- Payment Buttons (only when approved) -------- #}
-    <div class="text-center py-3">
-    {% if app.application_status != 'approved' and not app.is_paid %}
-      <div class="make-payment">Make Payment</div>
-      <div class="payment-methods">
-        <a href="{% url 'esewa_initiate' app.pk %}" class="btn btn-success">
-          Pay with eSewa
-        </a>
-        <a href="{% url 'khalti_initiate' app.pk %}" class="btn btn-outline-primary ms-2">
-          Pay with Khalti
-        </a>
+  <!--Payment Table if payment done-->
+  <div class="payment-detail">
+        <div class="card-header bg-success text-white">
+          
+        </div>
+        {% if payment_info %}
+        <div class="card-body">
+          <table class="table-bordered">
+            <thead class="bg-success">
+              <tr>
+                <th>Transaction ID</th>
+                <th>Channel</th>
+                <th>Amount</th>
+                <th>Payment Status</th>
+                <th>Payment Date</th>
+                <th>Paid Course</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ payment_info.transaction_uuid }}</td>
+                <td>{{ payment_info.payment_method }}</td>
+                <td>{{ payment_info.amount_paid }}</td>
+                <td>{{ payment_info.status }}</td>
+                <td>{{ payment_info.payment_date }}</td>
+                <td>{{ payment_info.application.course.course_name|default:"—" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="card-body">
+            <div class="payment-methods text-center py-4">
+              <a href="{% url 'esewa_initiate' app.pk %}" class="btn btn-success">
+                Pay with eSewa
+              </a>
+              <a href="{% url 'khalti_initiate' app.pk %}" class="btn btn-outline-primary ms-2">
+                Pay with Khalti
+              </a>
+          </div>
+        </div>
+        {% endif %}
       </div>
-    {% else %}
-      <button class="btn btn-secondary" disabled>
-        {% if app.is_paid %}Payment Completed{% else %}Payment Disabled{% endif %}
-      </button>
-  {% endif %}
-</div>
 
 
   {# -------- Re-submit Button (when rejected) -------- #}

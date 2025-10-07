@@ -1,0 +1,229 @@
+/* ---------- Design tokens ---------- */
+:root{
+  --bg: #f7f9fc;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --primary: #0d6efd;     /* similar to Bootstrap primary */
+  --success: #198754;
+  --danger: #dc3545;
+  --warning: #f59e0b;
+  --border: #e5e7eb;
+  --ring: rgba(13, 110, 253, 0.15);
+  --shadow: 0 6px 20px rgba(0,0,0,.06);
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg: #0b1220;
+    --card: #101827;
+    --text: #e5e7eb;
+    --muted: #9aa3b2;
+    --primary: #4da3ff;
+    --success: #42c08c;
+    --danger: #ff6b81;
+    --border: #1f2a3b;
+    --ring: rgba(77, 163, 255, 0.25);
+    --shadow: 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+
+/* ---------- Page shell ---------- */
+.application-list-dashboard{
+  background: var(--bg);
+  color: var(--text);
+  padding: 2rem 1rem;
+  min-height: 60vh;
+}
+
+.application-list-title{
+  font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: .2px;
+}
+
+/* ---------- Tables ---------- */
+.table-bordered{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+}
+
+.table-bordered thead tr{
+  background: var(--primary);
+  color: #fff;
+}
+
+.table-bordered th,
+.table-bordered td{
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: .95rem;
+}
+
+.table-bordered th{
+  font-weight: 600;
+  text-align: left;
+}
+
+.table-bordered tbody tr:last-child td{
+  border-bottom: 0;
+}
+
+.table-bordered tbody tr:hover{
+  background: rgba(13,110,253,.05);
+}
+
+/* helper when template uses these classes without Bootstrap loaded */
+.bg-primary{ background: var(--primary) !important; color: #fff !important; }
+.text-success{ color: var(--success) !important; }
+.text-danger{ color: var(--danger) !important; }
+
+/* Responsive table wrapper (auto add around tables on mobile) */
+@media (max-width: 768px){
+  .table-bordered{
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ---------- Payment detail card ---------- */
+.payment-detail{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin: 1.5rem 0 2rem;
+}
+
+.payment-detail .card-header{
+  background: var(--success);
+  color: #fff;
+  padding: .9rem 1rem;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.payment-detail .card-body{
+  padding: 1rem;
+}
+
+.payment-detail .table-bordered{
+  box-shadow: none;
+  margin: 0;
+}
+
+/* ---------- Payment actions ---------- */
+.text-center{ text-align: center; }
+.text-end{ text-align: end; }
+.py-3{ padding-top: 1rem; padding-bottom: 1rem; }
+.py-4{ padding-top: 1.25rem; padding-bottom: 1.25rem; }
+
+.make-payment{
+  font-weight: 700;
+  margin-bottom: .5rem;
+  color: var(--text);
+}
+
+.payment-methods{
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+/* Buttons (Bootstrap-like look without needing Bootstrap) */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .55rem 1rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: #e5e7eb;
+  color: #111827;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform .05s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  cursor: pointer;
+}
+
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.10);
+}
+
+.btn:active{
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.btn-success{
+  background: var(--success);
+  color: #fff;
+}
+
+.btn-success:hover{ filter: brightness(1.05); }
+
+.btn-outline-primary{
+  background: transparent;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline-primary:hover{
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-secondary{
+  background: #9aa3b2;
+  color: #fff;
+}
+
+.btn[disabled],
+.btn:disabled{
+  opacity: .65;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* utilities */
+.ms-2{ margin-left: .5rem; }
+
+/* ---------- Empty state ---------- */
+.no-application-list{
+  background: var(--card);
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  border-radius: 12px;
+  padding: 2rem 1rem;
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Focus ring for accessibility ---------- */
+a.btn:focus,
+button.btn:focus{
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+/* ---------- Date cells monospace for readability ---------- */
+td:nth-child(6), /* submitted at */
+td:nth-child(9){ /* approval/rejection date if present */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: .92rem;
+}

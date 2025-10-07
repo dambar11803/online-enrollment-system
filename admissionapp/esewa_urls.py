@@ -1,6 +1,6 @@
 # admissionapp/urls_payments.py or payment/urls.py
 from django.urls import path
-from .views_payments import esewa_initiate, esewa_success, esewa_failure
+from .esewa_payments import esewa_initiate, esewa_success, esewa_failure
 
 urlpatterns = [
     # path("esewa/initiate/<int:application_id>/", esewa_initiate, name="esewa_initiate"),

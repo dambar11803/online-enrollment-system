@@ -8,7 +8,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("", include("admissionapp.urls")),
-    path("pay/", include("admissionapp.urls_payments")),
+    path("pay/", include("admissionapp.esewa_urls")),
+    path("pay/", include("admissionapp.khalti_urls"),)
     # path("pay/", include("payment.urls")),
 ]
 

@@ -72,11 +72,6 @@ from .models import (
 from django.contrib.auth.views import PasswordChangeView
 from .tokens import account_activation_token  
 
-#For E-Sewa payment
-from .models import PaymentDetail
-from .utils import esewa_signature
-
-
 
 User = get_user_model()
 
@@ -717,7 +712,25 @@ def course_applicant_detail(request, pk):
     
     edu_info = EducationalInfo.objects.filter(
         user=applicant.user
-    )
+    ) 
+    
+    document_list = []
+    if edu_info:
+        for edu in edu_info: 
+            docs = [
+                ("Transcript 1", edu.upload_transcript1),
+                ("Transcript 2", edu.upload_transcript2),
+                ("Character Certificate", edu.upload_character),
+                ("License", edu.upload_license),
+                ("Other Document", edu.upload_other),
+                ("Other Document 1", edu.upload_other1),
+            ]
+            document_list.append(
+                {
+                    "edu":edu,
+                    "documents": [doc for doc in docs if doc[1]] 
+                }
+            )
     
     payment_info = PaymentDetail.objects.filter(application=applicant).select_related('application__course').order_by('-payment_date').first()
 
@@ -726,6 +739,7 @@ def course_applicant_detail(request, pk):
         "edu_info": edu_info,
         "applicant": applicant,
         "payment_info": payment_info,
+        "document_info":document_list,
     }
     return render(
         request,
@@ -822,13 +836,22 @@ def application_list(request):
         Application.objects
         .filter(user=request.user)
         .select_related("course")
+        .prefetch_related("payment")
         .order_by("submitted_at")
     )
+    
+    payment_info = PaymentDetail.objects.filter(
+        user=request.user, status="COMPLETE").select_related("application__course").first()
+    
+    
+    context = {
+        "applications": applications,
+        "payment_info":payment_info,
+    }
+    
     return render(
         request,
-        "student/application_list.html",
-        {"applications": applications}
-    )
+        "student/application_list.html",context)
 
 
 # -----------------------------
@@ -1397,166 +1420,89 @@ def export_rejected_applications(request):
     return resp
 
 
-# -----------------------------
-# Khalti Integration
-# -----------------------------
-KHALTI_HEADERS = {
-    "Authorization": f"Key {settings.KHALTI_SECRET_KEY.strip()}",
-    "Content-Type": "application/json",
-}
-
+#-----------------------------
+#Export Pending Applications 
+#-----------------------------
 
 @login_required
-def khalti_initiate(request, application_id):
-    app = get_object_or_404(
-        Application,
-        pk=application_id,
-        user=request.user
+@user_passes_test(_is_admin)
+def export_pending_applications(request):
+    """Export only pending applications into an Excel file."""
+    qs = (
+        Application.objects
+        .select_related("user", "course")
+        .filter(application_status="pending")
+        .order_by("-submitted_at")
     )
-    course = app.course  # FK to CourseDetails
 
-    # Amount in paisa (use your course_fee or whatever you charge)
-    course_full_fee = course.course_fee
-    course_full_fee = (course_full_fee * 30) / 100
-    course_full_fee = course_full_fee * 100
-    course_full_fee = int(course_full_fee)
-    amount_paisa = max(5000000, course_full_fee)
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Pending Applications"
 
-    purchase_order_id = f"APP-{app.pk}-{uuid.uuid4().hex[:6]}"
-    purchase_order_name = course.course_name
+    headers = [
+        "SN",
+        "Name",
+        "Mobile",
+        "Application No.",
+        "Applied Course",
+        "Applied Degree",
+        "Application Status",
+        "Submitted Date",
+    ]
+    ws.append(headers)
 
-    payload = {
-        "return_url": request.build_absolute_uri(
-            "/pay/khalti/return/"
-        ),
-        "website_url": request.build_absolute_uri("/"),
-        "amount": amount_paisa,
-        "purchase_order_id": purchase_order_id,
-        "purchase_order_name": purchase_order_name,
-        "customer_info": {
-            "name": (
-                request.user.get_full_name() or
-                request.user.username
-            ),
-            "email": request.user.email or "dev@example.com",
-        },
-        "product_details": [
-            {
-                "identity": course.course_code or str(course.pk),
-                "name": course.course_name,
-                "total_price": amount_paisa,
-                "quantity": 1,
-                "unit_price": amount_paisa,
-            }
-        ],
-        "merchant_application_id": str(app.pk),
-        "merchant_course_id": str(course.pk),
-        "merchant_user_id": str(request.user.pk),
-    }
+    bold = Font(bold=True)
+    for col_idx in range(1, len(headers) + 1):
+        cell = ws.cell(row=1, column=col_idx)
+        cell.font = bold
+        cell.alignment = Alignment(horizontal="center", vertical="center")
 
-    headers = {
-        "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
-        "Content-Type": "application/json",
-    }
-    r = requests.post(
-        settings.KHALTI_INITIATE_URL,
-        json=payload,
-        headers=headers,
-        timeout=20
-    )
-    data = r.json()
-    if r.status_code != 200 or "payment_url" not in data:
-        return HttpResponseBadRequest(
-            f"Initiation failed: {r.status_code} {data}"
+    for idx, app in enumerate(qs, start=1):
+        full_name = (
+            getattr(app.user, "full_name", "").strip() or
+            app.user.get_username()
+        )
+        submitted_str = (
+            app.submitted_at.strftime("%Y-%m-%d %H:%M")
+            if app.submitted_at
+            else ""
+        )
+        ws.append(
+            [
+                idx,
+                full_name,
+                app.user.mobile or "",
+                app.application_no,
+                app.course.course_name,
+                app.course.degree,
+                app.application_status,
+                submitted_str,
+            ]
         )
 
-    # Save/remember what you'll need after return
-    request.session.update(
-        {
-            "khalti_pidx": data.get("pidx"),
-            "khalti_order_id": purchase_order_id,
-            "khalti_course_name": course.course_name,
-            "khalti_amount_paisa": amount_paisa,
-            "khalti_application_id": app.pk,
-        }
+    for column_cells in ws.columns:
+        max_len = 0
+        col = column_cells[0].column
+        for c in column_cells:
+            val = str(c.value) if c.value else ""
+            max_len = max(max_len, len(val))
+        ws.column_dimensions[get_column_letter(col)].width = min(max_len + 2, 50)
+
+    buffer = BytesIO()
+    wb.save(buffer)
+    buffer.seek(0)
+
+    content_type = (
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
-    return redirect(data["payment_url"])
-
-
-@csrf_exempt
-def khalti_return(request):
-    # 1) Get pidx from query or session
-    pidx = request.GET.get("pidx") or request.session.get(
-        "khalti_pidx"
+    response = HttpResponse(buffer.getvalue(), content_type=content_type)
+    response["Content-Disposition"] = (
+        'attachment; filename="pending_applications.xlsx"'
     )
-    if not pidx:
-        return HttpResponseBadRequest("Missing pidx")
-
-    # 2) Verify with Khalti (lookup)
-    headers = {
-        "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
-        "Content-Type": "application/json",
-    }
-    r = requests.post(
-        settings.KHALTI_LOOKUP_URL,
-        json={"pidx": pidx},
-        headers=headers,
-        timeout=20
-    )
-    data = r.json()
-
-    # 3) Build the template context
-    amount_paisa = (
-        data.get("total_amount") or
-        request.session.get("khalti_amount_paisa")
-    )
-    try:
-        amount_paisa = int(amount_paisa)
-    except (TypeError, ValueError):
-        amount_paisa = 0
-
-    ctx = {
-        "order_id": (
-            request.session.get("khalti_order_id") or
-            request.GET.get("purchase_order_id")
-        ),
-        "course_name": request.session.get("khalti_course_name"),
-        "amount_rs": amount_paisa / 100,  # convert paisa -> NPR
-        "resp": data,
-        "pidx": pidx,
-    }
-
-    # 4) Render success/failed
-    if r.status_code == 200 and data.get("status") == "Completed":
-        # (optional) clear session keys so they aren't reused
-        for k in (
-            "khalti_pidx",
-            "khalti_order_id",
-            "khalti_course_name",
-            "khalti_amount_paisa",
-        ):
-            request.session.pop(k, None)
-        return render(request, "payments/success.html", ctx)
-    return render(request, "payments/failed.html", ctx)
+    return response
 
 
-@login_required
-def khalti_verify(request):
-    """Optional endpoint to re-verify a pidx later (AJAX)."""
-    pidx = request.GET.get("pidx")
-    if not pidx:
-        return HttpResponseBadRequest("Missing pidx")
-    headers = {
-        "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
-        "Content-Type": "application/json",
-    }
-    r = requests.post(
-        settings.KHALTI_LOOKUP_URL,
-        json={"pidx": pidx},
-        headers=headers,
-        timeout=20
-    )
-    return JsonResponse(r.json(), status=r.status_code) 
+
 
 #----------------------------------------------
 #Contact Form 

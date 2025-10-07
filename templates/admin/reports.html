@@ -12,7 +12,7 @@
     <div class="reports-title py-4">Reports</div>
     <table class="table table-bordered">
         <tr>
-            <td>Particulr</td><td>View</td><td>Download</td>
+            <td>Particular</td><td>View</td><td>Download</td>
         </tr>
         <tr><th>Total Applicants</th>
         <td><a href="{% url 'total_applications' %}"><i class="fa-solid fa-eye text-center"></i></a></td>
@@ -29,8 +29,10 @@
         <tr><th>Rejected Applicants</th>
             <td><a href="{% url 'total_rejected' %}"><i class="fa-solid fa-eye"></i></a></td>
             <td><a href="{% url 'export_rejected_applications' %}" class=""><i class="fa-solid fa-file-arrow-down text-success"></i></a></td></tr>
-            <tr><th>Pending Applicants</th>
-            <td><a href="{% url 'total_pending' %}"><i class="fa-solid fa-eye"></i></td><td><i class="fa-solid fa-file-arrow-down text-success"></i></td></tr>
+        <tr><th>Pending Applicants</th>
+            <td><a href="{% url 'total_pending' %}"><i class="fa-solid fa-eye"></i></td>
+            <td><a href="{% url 'export_pending_applications' %}" class=""><i class="fa-solid fa-file-arrow-down text-success"></i></a></td></tr>
+            
     </table>
    </div>
 {% endblock %}

@@ -96,13 +96,13 @@ urlpatterns = [
         views.export_rejected_applications,
         name="export_rejected_applications",
     ),
+    
     path(
-        "pay/khalti/init/<int:application_id>/",
-        views.khalti_initiate,
-        name="khalti_initiate",
+        "export-pending-application/",
+        views.export_pending_applications,
+        name="export_pending_applications",
     ),
-    path("pay/khalti/return/", views.khalti_return, name="khalti_return"),
-    path("pay/khalti/verify/", views.khalti_verify, name="khalti_verify"),
+    
     path('contact/', views.contact, name='contact'),
      
     # Password change URLs

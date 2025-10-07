@@ -317,15 +317,18 @@ class CourseDetails(models.Model):
     ]
 
     degree = models.CharField(max_length=50, choices=DEGREE_CHOICES)
-    course_name = models.CharField(max_length=10, unique=True)
-    course_full_name = models.CharField(max_length=100, unique=True, blank=True)
+    course_name = models.CharField(max_length=10, unique=True,
+                                   verbose_name="Course Name(short form)")
+    course_full_name = models.CharField(max_length=100, unique=True, blank=True,
+                                    verbose_name="Course Full Name")
     course_code = models.CharField(max_length=10, unique=True)
     course_duration = models.CharField(max_length=10, choices=COURSE_DURATION)
     total_seats = models.PositiveIntegerField(default=40)
     seats_filled = models.PositiveIntegerField(default=0)
     course_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     course_add_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    course_desc = models.TextField(blank=True, help_text="Overview, curriculum etc")
+    course_desc = models.TextField(blank=True, help_text="Overview, curriculum etc"
+                                   ,verbose_name="Course Description")
     min_requirement = models.TextField(
         blank=True,
         verbose_name="Minimum Requirement",
@@ -336,6 +339,7 @@ class CourseDetails(models.Model):
         blank=True,
         null=True,
         help_text="Upload a background image for the course",
+        verbose_name="Background Picture"
     )
 
     @property
