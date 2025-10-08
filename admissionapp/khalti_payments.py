@@ -15,7 +15,18 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt 
 from .models import Application, PaymentDetail 
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest 
+from .models import Notification 
+
+
+#Helper Function 
+def create_notification(user, title, message):
+    notification = Notification.objects.create(
+        user=user,
+        title=title,
+        message=message,
+    )
+    return notification
 
 # -----------------------------
 # Khalti Integration
@@ -218,6 +229,13 @@ def khalti_return(request):
                     if hasattr(app, "is_paid") and not app.is_paid:
                         app.is_paid = True
                         app.save(update_fields=["is_paid"])
+
+                    # Create notification
+                    create_notification(
+                        user=request.user,
+                        title="Payment with Khalti",
+                        message="Your payment has been done successfully and saved.",
+                    )
 
                 # Non-complete → upsert a record for audit but don't mark paid
                 else:

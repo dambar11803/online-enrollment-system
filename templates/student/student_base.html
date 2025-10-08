@@ -46,7 +46,12 @@
 
             <li class="nav-item">
               {# TODO: replace 'apply' with your real route name, or remove this item #}
-              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'admission' %}active{% endif %}" href="{% url 'application_list' %}"><i class="fa-solid fa-list"></i> <span>Application</span></a>
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'application_list' %}active{% endif %}" href="{% url 'application_list' %}"><i class="fa-solid fa-list"></i> <span>Application</span></a>
+            </li>
+
+            <li class="nav-item">
+              {# TODO: replace 'apply' with your real route name, or remove this item #}
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'notification_list' %}active{% endif %}" href="{% url 'notification_list' %}"><i class="fa-solid fa-list"></i> <span>Notifications</span></a>
             </li>
 
             <li class="nav-item">

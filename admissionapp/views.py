@@ -66,6 +66,7 @@ from .models import (
     EducationalInfo,
     Application,
     PaymentDetail,
+    Notification,
 )
 
 #impors for custom passwordchange 
@@ -110,6 +111,16 @@ def send_activation_email(user, request):
         [user.email]
     ).send()
 
+#------------------------------------
+#Helper: Notification Object Creation
+#------------------------------------ 
+def create_notification(user, title, message):
+    notification = Notification.objects.create(
+        user=user,
+        title=title,
+        message=message,
+    )
+
 
 # -----------------------------
 # Register View
@@ -121,6 +132,13 @@ def register(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+            
+            # Create notification
+            create_notification(
+                user=user,
+                title="Welcome to Online Enrollment System!",
+                message="Your account has been created successfully.",
+            )
             send_activation_email(user, request)
             messages.success(
                 request,
@@ -420,6 +438,13 @@ def PersonalInfo_view(request):
             personalinfo = form.save(commit=False)
             personalinfo.user = request.user
             personalinfo.save()
+            
+            # Create notification
+            create_notification(
+                user=request.user,
+                title="Personal Information Saved",
+                message="Your personal details have been successfully submitted and saved.",
+            )
             messages.success(
                 request,
                 "Personal Details submitted successfully"
@@ -485,7 +510,14 @@ def EducationalInfo_view(request):
 
             # Run full model validation (validators for year, % etc.)
             edu.full_clean()
-            edu.save()
+            edu.save() 
+            
+            # Create notification
+            create_notification(
+                user=request.user,
+                title="Educational Information Saved",
+                message="Your educational details have been successfully submitted and saved.",
+            )
 
             messages.success(
                 request,
@@ -503,6 +535,17 @@ def EducationalInfo_view(request):
     return render(request, "student/educational_info.html")
 
 
+#-----------------------------
+#Notification View 
+#-----------------------------
+@login_required
+def notification_list(request):
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at') 
+    context = {
+        'notifications':notifications,
+    }
+
+    return render(request, 'student/notification_list.html', context)
 # -----------------------------
 # Profile
 # -----------------------------
@@ -634,6 +677,13 @@ def edit_personal_info(request, pk):
         )
         if form.is_valid():
             form.save()
+            
+            # Create notification
+            create_notification(
+                user=request.user,
+                title="Personal Detail Updated",
+                message="Your personal details have been successfully submitted and saved.",
+            )
             return redirect("student_dashboard")
     else:
         form = PersonalInfoForm(instance=student)
@@ -657,6 +707,13 @@ def edit_educational_info(request, pk):
         )
         if form.is_valid():
             form.save()
+            
+            # Create notification
+            create_notification(
+                user=request.user,
+                title="Educational Information Updated",
+                message="Your educational details have been successfully updated and saved.",
+            )
             return redirect("education_list")
     else:
         form = EducationalInfoForm(instance=edu_info)
@@ -816,6 +873,20 @@ def apply_course(request, pk):
     )
 
     if created:
+        # Create notification
+        create_notification(
+            user=request.user,
+            title="Applied Course",
+            message="Your Application has been successfully submitted and saved.",
+        )
+        
+        # Create notification
+        create_notification(
+            user=request.user,
+            title="Course Application",
+            message="Your application has been successfully submitted and saved.",
+        )
+        
         messages.success(
             request,
             "Application Submitted Successfully."
@@ -877,7 +948,6 @@ def approval_rejection(request, pk):
         )
 
         if action == "approve":
-            # Idempotency: don't double-approve and double-count
             if application.application_status == "approved":
                 messages.info(
                     request,
@@ -908,7 +978,13 @@ def approval_rejection(request, pk):
                     "reason_to_reject",
                 ]
             )
-
+            
+            # Create notification
+            create_notification(
+                user=application.user, 
+                title="Application Approved",
+                message="Congratulations! Your application has been approved.")
+            
             # Email (only if recipient exists)
             recipient = application.user.email
             if recipient:
@@ -966,7 +1042,6 @@ def approval_rejection(request, pk):
                 ]
             )
             return redirect("reason_to_reject", pk=application.pk)
-
         else:
             messages.error(request, "Invalid action.")
             return redirect("course_application_list")
@@ -996,6 +1071,13 @@ def reason_to_rejection(request, pk):
                 app.approved_rejected_date = timezone.now()
 
             app.save()
+            
+            # Create notification
+            create_notification(
+                user=request.user,
+                title="Applicaton Rejection",
+                message="Your application has been Rejected and saved.",
+            )
 
             # Build email context from updated instance (app)
             context = {
@@ -1035,6 +1117,8 @@ def reason_to_rejection(request, pk):
                     "Application rejected and email sent "
                     "successfully!"
                 )
+                
+                
             else:
                 messages.warning(
                     request,
@@ -1066,6 +1150,13 @@ def re_submit_application(request, pk):
     if application.application_status == "rejected":
         application.application_status = "re-submit"
         application.save()
+        
+        # Create notification
+        create_notification(
+            user=request.user,
+            title="Application Re-Submission",
+            message="Your application has been successfully Re-Submited.",
+        )
         messages.success(
             request,
             "Application re-submitted successfully."
@@ -1528,8 +1619,273 @@ class CustomPasswordChangeView(PasswordChangeView):
         return super().form_valid(form) 
     
 #---------------------------------------
-#Admin: Payment Check and Approval. 
-#--------------------------------------- 
+#Admin: Download PDF of Applicant Detail 
+#---------------------------------------  
 
+# views.py
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from io import BytesIO
+from django.conf import settings
+import os
 
+def download_applicant_pdf(request, applicant_id):
+    # Import your actual models
+    from .models import Application, PersonalInfo, EducationalInfo, PaymentDetail
+    
+    # Get applicant data
+    applicant = Application.objects.get(pk=applicant_id)
+    per_info = PersonalInfo.objects.filter(user=applicant.user).first()
+    edu_info = EducationalInfo.objects.filter(user=applicant.user)
+    payment_info = PaymentDetail.objects.filter(application=applicant).first()
+    
+    # Create BytesIO buffer
+    buffer = BytesIO()
+    
+    # Create PDF
+    pdf = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=40,
+        leftMargin=40,
+        topMargin=40,
+        bottomMargin=40
+    )
+    
+    elements = []
+    styles = getSampleStyleSheet()
+    
+    # Custom styles
+    title_style = ParagraphStyle(
+        'Title',
+        parent=styles['Heading1'],
+        fontSize=20,
+        textColor=colors.HexColor('#1a1a1a'),
+        spaceAfter=20,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    section_style = ParagraphStyle(
+        'Section',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=colors.white,
+        spaceAfter=12,
+        spaceBefore=12,
+        fontName='Helvetica-Bold',
+        backColor=colors.HexColor('#0d6efd')
+    )
+    
+    # Title
+    title = Paragraph("Course Applicant Detail", title_style)
+    elements.append(title)
+    elements.append(Spacer(1, 20))
+    
+    # 1. Application Information Section
+    elements.append(Paragraph("Application Information", section_style))
+    app_data = [
+        ['Applicant:', applicant.user.get_full_name() or applicant.user.username],
+        ['Email:', applicant.user.email or '—'],
+        ['Mobile No.:', applicant.user.mobile or '—'],
+        ['User Created at:', str(applicant.user.user_created_at) if applicant.user.user_created_at else '—'],
+        ['Submitted:', applicant.submitted_at.strftime('%Y-%m-%d %H:%M:%S')],
+    ]
+    
+    app_table = Table(app_data, colWidths=[2*inch, 4.5*inch])
+    app_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f8f9fa')),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 8),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    elements.append(app_table)
+    elements.append(Spacer(1, 15))
+    
+    # 2. Personal Information Section with Profile Picture
+    if per_info:
+        elements.append(Paragraph("Personal Information", section_style))
+        
+        # Profile picture handling
+        profile_pic = None
+        if per_info.profile_pic:
+            try:
+                pic_path = per_info.profile_pic.path
+                if os.path.exists(pic_path):
+                    profile_pic = Image(pic_path, width=1.5*inch, height=1.5*inch)
+            except:
+                profile_pic = None
+        
+        personal_data = [
+            ['Address:', per_info.address or '—'],
+            ['Gender:', per_info.get_gender_display() if per_info.gender else '—'],
+            ['Date of Birth:', per_info.dob.strftime('%Y-%m-%d') if per_info.dob else '—'],
+            ['Father\'s Name:', per_info.father or '—'],
+            ['Mother\'s Name:', per_info.mother or '—'],
+            ['Grandfather\'s Name:', per_info.grandfather or '—'],
+            ['Citizenship No.:', per_info.citizenship_no or '—'],
+        ]
+        
+        # If profile pic exists, add it to the right side
+        if profile_pic:
+            per_table = Table(personal_data, colWidths=[2*inch, 3*inch])
+            per_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f8f9fa')),
+                ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+                ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 8),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+                ('TOPPADDING', (0, 0), (-1, -1), 6),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+            ]))
+            
+            combined_table = Table([[per_table, profile_pic]], colWidths=[5*inch, 1.8*inch])
+            combined_table.setStyle(TableStyle([
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('ALIGN', (1, 0), (1, 0), 'CENTER'),
+            ]))
+            elements.append(combined_table)
+        else:
+            per_table = Table(personal_data, colWidths=[2*inch, 4.5*inch])
+            per_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f8f9fa')),
+                ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+                ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+                ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 8),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+                ('TOPPADDING', (0, 0), (-1, -1), 6),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+            ]))
+            elements.append(per_table)
+        
+        elements.append(Spacer(1, 15))
+    
+    # 3. Educational Background Section
+    elements.append(Paragraph("Educational Background", section_style))
+    
+    if edu_info.exists():
+        edu_data = [['Level', 'Faculty', 'Course', 'University', 'College', 'Year', 'Grade/CGPA']]
+        
+        for edu in edu_info:
+            edu_data.append([
+                edu.level or '—',
+                edu.faculty or '—',
+                edu.course_name or '—',
+                edu.university_name or '—',
+                edu.college_name or '—',
+                str(edu.passed_year) if edu.passed_year else '—',
+                str(edu.grade_percent) if edu.grade_percent else '—',
+            ])
+        
+        edu_table = Table(edu_data, colWidths=[0.9*inch, 1*inch, 1*inch, 1.3*inch, 1.3*inch, 0.7*inch, 0.8*inch])
+        edu_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#d1ecf1')),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 6),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ]))
+        elements.append(edu_table)
+    else:
+        elements.append(Paragraph("No educational information available.", styles['Normal']))
+    
+    elements.append(Spacer(1, 15))
+    
+    # 4. Application Status Section
+    elements.append(Paragraph("Application Status", section_style))
+    
+    status_data = [
+        ['Degree:', applicant.course.degree],
+        ['Course:', applicant.course.course_name],
+        ['Application No.:', applicant.application_no],
+        ['Submitted At:', str(applicant.submitted_at)],
+        ['Status:', applicant.application_status],
+    ]
+    
+    if applicant.application_status == 'approved' and applicant.approved_rejected_date:
+        status_data.append(['Approved Date:', str(applicant.approved_rejected_date)])
+    elif applicant.application_status == 'rejected':
+        if applicant.reason_to_reject:
+            status_data.append(['Rejection Reason:', applicant.reason_to_reject])
+        if applicant.approved_rejected_date:
+            status_data.append(['Rejection Date:', str(applicant.approved_rejected_date)])
+    
+    status_table = Table(status_data, colWidths=[2*inch, 4.5*inch])
+    status_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#fff3cd')),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 8),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    elements.append(status_table)
+    elements.append(Spacer(1, 15))
+    
+    # 5. Payment Details Section
+    elements.append(Paragraph("Payment Details", section_style))
+    
+    if payment_info:
+        payment_data = [
+            ['Transaction ID:', payment_info.transaction_uuid],
+            ['Status:', payment_info.status],
+            ['Payment Method:', payment_info.payment_method],
+            ['Amount:', str(payment_info.amount_paid)],
+            ['Payment Date:', str(payment_info.payment_date)],
+            ['Paid Course:', payment_info.application.course.course_name or '—'],
+        ]
+        
+        payment_table = Table(payment_data, colWidths=[2*inch, 4.5*inch])
+        payment_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#d4edda')),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 8),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+            ('TOPPADDING', (0, 0), (-1, -1), 6),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ]))
+        elements.append(payment_table)
+    else:
+        elements.append(Paragraph("No payment has been recorded for this application.", styles['Normal']))
+    
+    # Build PDF
+    pdf.build(elements)
+    
+    # Get PDF from buffer
+    buffer.seek(0)
+    response = HttpResponse(buffer.read(), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="applicant_{applicant.application_no}.pdf"'
+    
+    return response
 

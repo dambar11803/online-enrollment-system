@@ -1,0 +1,41 @@
+{% extends 'student/student_base.html' %}
+{% load static %}
+{% block title %}
+  notification-list
+{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/student/notification_list.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <div class="notification-section container">
+    {% if notifications %}
+      <div class="notification-title">Notifications</div>
+      <table class="table-bordered">
+          <thead>
+              <tr>
+                  <th>SN</th>
+                  <th>Title</th>
+                  <th>Message</th>
+                  <th>Created at</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for n in notifications %}
+                  <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td>{{n.title}}</td>
+                      <td>{{n.message}}</td>
+                      <td>{{n.created_at}}</td>
+                  </tr>
+
+              {% endfor %}
+          </tbody>
+      </table>
+    {% else %}
+      <div class="no-notifications">
+        Na Any Notifications
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

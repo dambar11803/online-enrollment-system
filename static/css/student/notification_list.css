@@ -1,0 +1,107 @@
+/* ==============================
+   Notification List Page
+   ============================== */
+
+.notification-section {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Title ---------- */
+.notification-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #0d6efd;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ---------- Table ---------- */
+table.table-bordered {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+table.table-bordered thead {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+table.table-bordered th,
+table.table-bordered td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border: 1px solid #dee2e6;
+}
+
+table.table-bordered tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table.table-bordered tbody tr:hover {
+  background-color: #e9f3ff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* ---------- No Notifications ---------- */
+.no-notifications {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6c757d;
+  font-weight: 500;
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+}
+
+/* ---------- Responsive Design ---------- */
+@media (max-width: 768px) {
+  .notification-section {
+    padding: 1rem;
+  }
+
+  table.table-bordered thead {
+    display: none;
+  }
+
+  table.table-bordered,
+  table.table-bordered tbody,
+  table.table-bordered tr,
+  table.table-bordered td {
+    display: block;
+    width: 100%;
+  }
+
+  table.table-bordered tr {
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  table.table-bordered td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  table.table-bordered td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: 45%;
+    text-align: left;
+    font-weight: 600;
+    color: #0d6efd;
+  }
+}

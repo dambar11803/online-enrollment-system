@@ -12,6 +12,7 @@ from .views import (
 urlpatterns = [
     path("", views.login_page, name="login_page"),
     path("register/", views.register, name="register"),
+    path('notification-list/', views.notification_list, name='notification_list'),
     path("redirect/", views.custom_redirect_url, name="custom_redirect_url"),
     path("logout/", views.log_out, name="logout"),
     path("activate/<uidb64>/<token>/", views.activate, name="activate"),
@@ -146,7 +147,6 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
-    
-   
+    path('applicant/<int:applicant_id>/download-pdf/', views.download_applicant_pdf, name='download_applicant_pdf'),
     
 ]

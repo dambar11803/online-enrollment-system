@@ -45,6 +45,12 @@
     <div class="container mt-4">
       <h2 class="mb-4">Course Applicant Detail</h2>
 
+      <!--Download pdf file link-->
+      <div class="download-pdf-btn text-end py-2">
+        <a href="{% url 'download_applicant_pdf' applicant.pk %}" class="btn btn-primary">
+        Download PDF
+      </a>
+      </div>
       <!-- 1. Application Info -->
       <div class="card mb-4">
         <div class="card-header bg-primary text-white d-flex justify-content-between">

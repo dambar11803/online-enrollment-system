@@ -15,9 +15,18 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from .models import Application, PaymentDetail, Notification
 
-from .models import Application, PaymentDetail
 
+#Helper Function 
+
+def create_notification(user, title, message):
+    notification = Notification.objects.create(
+        user=user,
+        title=title,
+        message=message,
+    )
+    return notification
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -281,6 +290,14 @@ def esewa_success(request):
             if hasattr(application, "is_paid"):
                 application.is_paid = True
                 application.save(update_fields=["is_paid"])
+            
+            # Create notification
+            create_notification(
+                user=request.user,
+                title="Pay with E-Sewa",
+                message="Your payment has been done successfully and saved.",
+            )    
+                
 
             messages.success(request, "Payment completed successfully via eSewa!")
             return redirect("student_dashboard")

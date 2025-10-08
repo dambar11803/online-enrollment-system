@@ -92,8 +92,10 @@ phone_regax = RegexValidator(
 )
 
 
+
+
 # ----------------------
-# Models
+# CustomUser Model
 # ----------------------
 class CustomUser(AbstractUser):
     """Custom user model with mobile and email fields."""
@@ -117,7 +119,7 @@ class CustomUser(AbstractUser):
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
-
+    
 
 # ------------------------------------
 # Student Personal Info
@@ -291,6 +293,18 @@ class EducationalInfo(models.Model):
             UniqueConstraint(fields=["user", "level"], name="uniq_user_level"),
         ]
 
+
+# ------------------------------------
+# Notifications
+# ------------------------------------
+class Notification(models.Model): 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, blank=True) 
+    message= models.CharField(max_length=200, blank=True) 
+    created_at = models.DateField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user.username} - notification"
 
 # ------------------------------------
 # Admin Related Models: CourseDetails
