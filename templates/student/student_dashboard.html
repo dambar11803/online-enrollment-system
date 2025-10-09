@@ -47,15 +47,16 @@ student_dashboard {% endblock %} {% block css %}
       <div class="col-md-4 mb-3">
         <div class="card">
           {% if course.bg_pic %}
-          <div
-            class="card-img-top course-bg"
-            style="background-image: url('{{ course.bg_pic.url }}');"
-          ></div>
+            <a href="{% url 'select_course' course.pk %}" class="course-link">
+            <div
+              class="card-img-top course-bg"
+              style="background-image: url('{{ course.bg_pic.url }}');"></div></a>
           {% else %}
-          <div
-            class="card-img-top course-bg"
-            style="background-image: url('{% static 'images/pic.jpg' %}')"
-          ></div>
+            <a href="{% url 'select_course' course.pk %}" class="course-link">
+            <div
+              class="card-img-top course-bg"
+              style="background-image: url('{% static 'images/pic.jpg' %}')">
+            </div></a>
           {% endif %} 
           <div class="card-body">
             <h5 class="card-title text-decoration-underline">
@@ -91,15 +92,17 @@ student_dashboard {% endblock %} {% block css %}
       <div class="col-md-4 mb-3">
         <div class="card">
           {% if course.bg_pic %}
-          <div
-            class="card-img-top course-bg"
-            style="background-image: url('{{course.bg_pic.url}}');"
-          ></div>
+            <a href="{% url 'select_course' course.pk %}" class="course-link">
+            <div
+              class="card-img-top course-bg"
+              style="background-image: url('{{course.bg_pic.url}}');">
+            </div></a>
           {% else %}
-          <div
-            class="card-img-top course-bg"
-            style="background-image: url('{% static 'css/images/pic.jpg' %}')"
-          ></div>
+            <a href="{% url 'select_course' course.pk %}" class="course-link">
+            <div
+              class="card-img-top course-bg"
+              style="background-image: url('{% static 'css/images/pic.jpg' %}')">
+            </div></a>
           {% endif %}
 
           <div class="card-body">
@@ -138,13 +141,15 @@ student_dashboard {% endblock %} {% block css %}
         <div class="card">
 
           {% if course.bg_pic %}
+            <a href="{% url 'select_course' course.pk %}" class="course-link">
             <div class="card-img-top course-bg" 
                 style="background-image: url('{{ course.bg_pic.url }}');">
-            </div>
+            </div></a>
           {% else %}
+            <a href="{% url 'select_course' course.pk %}" class="course-link">
             <div class="card-img-top course-bg" 
                 style="background-image: url('{% static 'images/pic.jpg' %}');">
-            </div>
+            </div></a>
           {% endif %}
             
           <div class="card-body">

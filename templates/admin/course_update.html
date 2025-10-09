@@ -5,7 +5,10 @@
 {% block css %} <link rel="stylesheet" href="{% static 'css/admin/course_update.css' %}"> {% endblock %}
 
 {% block content %}
-    <div class="add-update-container container">
+    <div class="add-update-container container text-end">
+        <div class="back-btn">
+            <a href="{% url 'course_list' %}" class="btn btn-outline-primary">Back</a>
+        </div>
         <div class="course-update-title">Update Course</div>
         <div class="course-update-form">
             <form method="POST"enctype="multipart/form-data">

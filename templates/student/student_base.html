@@ -51,7 +51,7 @@
 
             <li class="nav-item">
               {# TODO: replace 'apply' with your real route name, or remove this item #}
-              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'notification_list' %}active{% endif %}" href="{% url 'notification_list' %}"><i class="fa-solid fa-list"></i> <span>Notifications</span></a>
+              <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'notification_list' %}active{% endif %}" href="{% url 'notification_list' %}"><i class="fa-solid fa-bell"></i><span>Notifications</span></a>
             </li>
 
             <li class="nav-item">
@@ -99,7 +99,10 @@
           <div class="col-12 col-md-3">
             <div class="about-app-footer">
               <div class="app-info fw-bold fs-5">About App</div>
-              <p class="app-info-intro mt-3">A simple web app designed to help you track, manage, and analyze debts. Stay organized with debtor records, monitor payments, and generate insightful reports for control.</p>
+              <p class="app-info-intro mt-3">The Online Enrollment System simplifies student 
+                admissions through digital registration, course applications, and status tracking. 
+                It automates approvals and payments, providing a fast, transparent, and paperless process 
+                for efficient and convenient enrollment.</p>
             </div>
           </div>
 

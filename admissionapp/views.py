@@ -1,6 +1,7 @@
 from math import ceil
 import uuid, json, base64, requests
 import requests  # type: ignore
+from django.shortcuts import redirect, resolve_url
 from io import BytesIO 
 from decimal import Decimal 
 from django.urls import reverse
@@ -140,11 +141,11 @@ def register(request):
                 message="Your account has been created successfully.",
             )
             send_activation_email(user, request)
-            messages.success(
-                request,
-                "Registration successful! Check your email to verify "
-                "your account.",
-            )
+            # messages.success(
+            #     request,
+            #     "Registration successful! Check your email to verify "
+            #     "your account.",
+            # )
             return redirect("login_page")
     else:
         form = UserRegisterForm()
@@ -158,27 +159,50 @@ def register(request):
 # -----------------------------
 # Activate account from email link
 # -----------------------------
+# def activate(request, uidb64, token):
+#     try:
+#         uid = force_str(urlsafe_base64_decode(uidb64))
+#         user = User.objects.get(pk=uid)
+#     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+#         user = None
+
+#     if user and account_activation_token.check_token(user, token):
+#         user.is_active = True
+#         user.save(update_fields=["is_active"])
+#         messages.success(
+#             request,
+#             "Your email has been verified. You can now log in."
+#         )
+#         return redirect("login_page")
+
+#     messages.error(
+#         request,
+#         "Activation link is invalid or has expired."
+#     )
+#     return redirect("register")
+
+
 def activate(request, uidb64, token):
+    user = None
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
+    except Exception as e:
+        # Optional: log this in dev
+        print("Activation decode/get error:", e)
+
+    login_url = resolve_url("login_page")  # or "admissionapp:login_page" if namespaced
+    register_url = resolve_url("register")
 
     if user and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save(update_fields=["is_active"])
-        messages.success(
-            request,
-            "Your email has been verified. You can now log in."
-        )
-        return redirect("login_page")
+        if not user.is_active:
+            user.is_active = True
+            user.save(update_fields=["is_active"])
+        messages.success(request, "Your email has been verified. You can now log in.")
+        return redirect(login_url)
 
-    messages.error(
-        request,
-        "Activation link is invalid or has expired."
-    )
-    return redirect("register")
+    messages.error(request, "Activation link is invalid or has expired.")
+    return redirect(register_url)
 
 
 # -----------------------------

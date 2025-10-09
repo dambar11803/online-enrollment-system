@@ -5,75 +5,49 @@
   course_detail
 {% endblock %}
 {% block css %}
-  <link rel="stylesheet" href="" />
+  <link rel="stylesheet" href="{% static 'css/student/select_course.css' %}" />
 {% endblock %}
 
 {% block content %}
-  <div class="course-detail-container container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="mb-0">
-        {{ courses.course_name }}
-        <small class="text-muted">({{ courses.course_code }})</small>
-      </h2>
-
-      <div class="btn-group">
-        <a href="{% url 'course_update' courses.pk %}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
-        <form method="post" action="{% url 'course_delete' courses.pk %}" onsubmit="return confirm('Delete this course?');">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
-        </form>
-        <a href="{% url 'course_list' %}" class="btn btn-secondary"><i class="fas fa-list"></i> Back to List</a>
-      </div>
+  <div class="course-select-container container">
+    <div class="course-select-title py-2">Couse Detail</div>
+    <div class="back-btn text-end">
+      <a href="{% url 'course_list' %}" class="btn btn-outline-primary my-3">Back</a>
     </div>
-
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="d-flex">
-              <div class="kv-label me-3">Degree</div>
-              <div class="kv-value">{{ courses.get_degree_display }}</div>
-            </div>
-            <div class="d-flex mt-2">
-              <div class="kv-label me-3">Duration</div>
-              <div class="kv-value">{{ courses.course_duration }}</div>
-            </div>
-            <div class="d-flex mt-2">
-              <div class="kv-label me-3">Added On</div>
-              <div class="kv-value">
-                {{ courses.course_add_date|date:'M d, Y, h:i A' }}
-                {# or: {{ courses.course_add_date|naturaltime }} if humanize is loaded #}
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="d-flex">
-              <div class="kv-label me-3">Total Seats</div>
-              <div class="kv-value">{{ courses.total_seats }}</div>
-            </div>
-            <div class="d-flex mt-2">
-              <div class="kv-label me-3">Seats Filled</div>
-              <div class="kv-value">{{ courses.seats_filled }}</div>
-            </div>
-            <div class="d-flex mt-2 align-items-center">
-              <div class="kv-label me-3">Remaining</div>
-              <div class="kv-value">
-                {% if courses.remaining_seat > 0 %}
-                  <span class="badge badge-left">{{ courses.remaining_seat }}</span>
-                {% else %}
-                  <span class="badge badge-full">Full</span>
-                {% endif %}
-              </div>
-            </div>
-            <div class="d-flex mt-2">
-              <div class="kv-label me-3">Course Fee</div>
-              <div class="kv-value">Rs. {{ courses.course_fee|floatformat:2 }}</div>
-              {# with humanize: Rs. {{ courses.course_fee|floatformat:2|intcomma }} #}
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="course">
+      <table class="table-bordered"> 
+            <tr>
+                <th>Degree</th><td>{{ courses.degree }}</td>
+            </tr>
+            <tr>
+                <th>Course Name</th><td>{{ courses.course_name}}</td>
+            </tr>
+            <tr>
+                <th>Course Code</th><td>{{ courses.course_code}}</td>
+            </tr>
+             <tr>
+                <th>Course Duration</th><td>{{ courses.course_duration}}</td>
+            </tr>
+             <tr>
+                <th>Total Seats</th><td>{{ courses.total_seats}}</td>
+            </tr>
+            <tr>
+                <th>Remaining Seats</th><td>{{ courses.remaining_seat}}</td>
+            </tr>
+             <tr>
+                <th>Course Total Fee</th><td>Rs.{{ courses.course_fee}}</td>
+            </tr>
+             <tr>
+                <th>Courses Added At</th><td>{{ courses.course_add_date}}</td>
+            </tr>
+            <tr>
+                <th>Course Description</th><td>{{ courses.course_desc}}</td>
+            </tr>
+            <tr>
+                <th>Minimum Requirement</th><td>
+                  {{ courses.min_requirement|default:"No Specific requirements."|linebreaks}}</td>
+            </tr>
+        </table>
     </div>
   </div>
 {% endblock %}
